@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presence Tracking | Scanner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/qrcode.css')}}">
+</head>
+<body style="background-color: #f1f1f1;">
+    <canvas id="bg-net"></canvas>
+    <div class="toast-container"></div>
+    <main>
+        <div class="card-list mx-auto">
+            <article class="card">
+                <figure class="card-image">
+                    <div><img id="qr" src="data:image/png;base64,{{ qr_code }}" alt="QR Code"></div>
+                </figure>
+                <div class="card-footer bg-white">
+                    <div class="card-meta card-meta--views">
+                        <div class="content bg-white" id="time">--:--:--</div>
+                    </div>
+                    <div class="card-meta card-meta--date">
+                        <div class="content bg-white" id="date">-- -- ----</div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='js/qr_code.js')}}" ></script>
+</body>
+</html>

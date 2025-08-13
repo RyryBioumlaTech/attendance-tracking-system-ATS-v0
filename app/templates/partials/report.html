@@ -1,0 +1,32 @@
+<div class="px-4 pt-2 report-sec">
+    <h2>REPORTS</h2>
+    <div>
+        
+        <div class="report_form_sec">
+            <div>
+                <form action="/load/report_data" method="post" data-target=".data_table" class="d-flex flex-row gap-2" id="search_form">
+                    <select name="department_id" id="dep_id" class="general-input">
+                        {% for dep in departments %}
+                            <option value="{{ dep.id}}">{{ dep.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="date" name="start_date" id="start" class="general-input">
+                    <input type="date" name="end_date" id="end" class="general-input">
+                    <input type="submit" value="Search" class="button" id="search_btn">
+                </form>
+            </div>
+            <div style="width: fit-content;">
+                <form action="/export_datas" method="post" target="_blank" id="export_pdf_form">
+                    <input type="hidden" name="exp_dep_id" id="exp_dep_id">
+                    <input type="hidden" name="exp_start_date" id="exp_start_date">
+                    <input type="hidden" name="exp_end_date" id="exp_end_date">
+                    <input type="submit" value="Export PDF" id="exp-btn" class="button">
+                </form>
+            </div>
+        </div>
+        <div class="data_table"></div>
+
+        
+        <div class="lamda" style="display:none ;"></div>
+    </div>
+</div>

@@ -1,0 +1,381 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --mind-vert: #007A5E;
+  --mind-rouge: #CE1126;
+  --mind-jaune: #FCD116;
+  --bg-login: rgba(255, 255, 255, 0.95); 
+  --input-bg: rgba(240, 240, 240, 1); 
+  --text-color: #111; 
+  --shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+*{
+	box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+}
+
+body {
+	font-family: "Lexend", sans-serif;
+	line-height: 1.5;
+	min-height: 100vh;
+    height: 100vh;
+    min-width: 100vw;
+    background-color: #f5f5f5;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    overflow-x: hidden;
+    flex-direction: row;
+}
+
+#main-content {
+    min-height: 100vh;
+    transition: all 0.35s ease-in-out; 
+    background-color: #f5f5f5;
+    flex-grow: 1;
+    padding-bottom: 10px;
+    margin-left: 230px;
+    overflow-y: hidden;
+}
+
+#sidebar {
+    width: 230px;
+    min-width: 230px;
+    min-height: 100vh;
+    height: 100vh;
+    transition: all .25s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--mind-vert);
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.dash_title {
+    color: white;
+    margin-left: 30px;
+    margin-top: 10px;
+    font-weight: 600px;
+}
+
+.sidebar-nav {
+    padding: 2rem 0;
+    flex: 1 1 auto;
+}
+
+a.sidebar-link {
+    padding: 0.625rem 1.625rem;
+    color: #ffff;
+    display: flex;
+    font-size: 1.2rem;
+    white-space: nowrap;
+    border-left: 3px solid transparent;
+    align-items: center;
+    gap: 4px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a.sidebar-link:hover {
+    background-color: rgb(255, 255, 255, .075);
+    border-left: 3px solid #ff512f;
+}
+
+
+.sidebar-item i {
+    color: white;
+}
+
+.sidebar-link i {
+    margin-right: .75rem;
+}
+
+.manage_sec, .report-sec {
+    width: 100%;
+    padding-top: 10px;
+    position: absolute;
+    overflow-y: scroll;
+    padding-bottom: 10px;
+}
+
+.mdrn_table {
+    min-width: 90%;
+    width: fit-content;
+}
+
+.mdrn_table2 {
+    min-width: 100%;
+    width: fit-content;
+}
+
+.table_sec {
+    width: 100%; 
+    margin-left: -25px;
+    padding-left: 25px;
+    padding-right: 70px;
+    padding-top: 15px;
+}
+
+.report_form_sec {
+    width: 100%; 
+    margin-left: -25px;
+    padding-left: 25px;
+    display: flex;
+    flex-direction: row;
+    padding-right: 194px;
+    justify-content: space-between;
+}
+
+.manage_form_sec {
+    width: 100%; 
+    margin-left: -25px;
+    padding-left: 25px;
+    display: flex;
+    flex-direction: row;
+    padding-right: 194px;
+    justify-content: space-between;
+}
+
+#register_form {
+    position: fixed;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+#register_form2 {
+    position: fixed;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+#update_form {
+    position: fixed;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.form_content {
+    height: fit-content;
+    width: 400px;
+    background-color: rgb(255, 255, 255);
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+    border-radius: 10px;
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    padding: 15px 25px;
+    box-sizing: border-box;
+}
+
+.form_content *{
+    font-family: 'Poppins',sans-serif;
+    color: #6b6b6b;
+    letter-spacing: 0.5px;
+    outline: none;
+    border: none;
+}
+
+.form_content button{
+    margin-top: 50px;
+    width: 100%;
+    background-color: #080710;
+    color: #ffffff;
+    padding: 7px 0;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form_content input{
+    display: block;
+    height: 40px;
+    width: 100%;
+    background-color: rgba(232, 232, 232, 0.315);
+    border-radius: 3px;
+    padding: 0 10px;
+    margin-top: 6px;
+    border: 1px solid #080710;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.form_content select {
+    height: 42px;
+    border-radius: 3px;
+    padding: 0 10px;
+    padding-right: 10px;
+    width: 170px;
+    border: 1px solid #080710;
+    background-color: rgba(232, 232, 232, 0.315);
+}
+
+label{
+    display: block;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.manage_form {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* From Uiverse.io by kamehame-ha */ 
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: var(--mind-vert);
+  outline: 3px var(--mind-vert) solid;
+  outline-offset: -3px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: 400ms;
+  color: white;
+  font-weight: 400;
+  
+  transition: 400ms;
+}
+
+.button:hover {
+  background-color: transparent;
+  color: #080710;
+}
+
+.general-input {
+    display: block;
+    width: 154px;
+    background-color: rgba(255, 255, 255, 0.913);
+    border-radius: 3px;
+    padding: 0px 10px;
+    border: 1px solid #080710;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+#dep_id {
+    width: 110px;
+}
+
+#exp-btn, #register-btn {
+    right: 25px;
+}
+
+th{
+    background-color: rgb(219, 219, 219);
+    padding: 10px 15px;
+    color: #888;
+}
+
+td{
+    background-color: rgb(255, 255, 255);
+    padding: 10px 15px;
+}
+
+thead {
+    margin-top: 10px;
+    margin-bottom: 3px;
+}
+
+.th1 {
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.th2 {
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+tbody .td1 {
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+tbody .td2 {
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0 5px;
+}
+
+.average_sec {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    right: 25px;
+    margin-top: 15px;
+    padding-right: 13px;
+}
+
+.average {
+    background-color: white;
+    border-radius: 10px;
+    width: 27%;
+    padding: 10px 15px;
+    box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+.number {
+    font-size: larger;
+    font-weight: 700;
+}
+
+thead {
+    width: fit-content;
+    height: fit-content;
+}
+
+.table-body {
+    max-height: 500px; /* hauteur visible */
+    overflow-y: auto;
+    width: 90%;
+    margin-right: 80px;
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; 
+}
+
+/* Évite que les colonnes bougent entre head et body */
+.table-body table {
+    table-layout: fixed;
+}
+
+.table-body::-webkit-scrollbar {
+    display: none;          /* Chrome, Edge, Safari */
+}
