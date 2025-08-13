@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATS | admin-dashbord</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='icons/bootstrap-icons.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/admindash.css')}}">
+</head>
+<body>
+    <div class="wrapper">
+        <aside id="sidebar">
+            <div class="top_sidebar"><h2 class="dash_title">ATS</h2></div>
+            <hr style="border: none; height: 1px; background-color: #ccc">
+            <ul class="sidebar-nav" style="margin-top: -30px;">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" onclick="loadsec('reports')"><i class="bi bi-list-task"></i><span>Reports</span></a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" onclick="loadsec('manage')"><i class="bi bi-kanban"></i><span>Manage</span></a>
+                </li>
+                {% if user.role == 'superAd' %}
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link" onclick="loadsec('admin-manager')"><i class="bi bi-person-fill-gear"></i><span>Admins</span></a>
+                    </li>
+                {% endif %}
+            </ul>
+            <div class="sidebar-footer">
+                <a href="/logout" class="sidebar-link">
+                    <li class="sidebar-item">
+                        <i class="bi bi-box-arrow-left"></i>
+                        <span>Logout</span>
+                    </li>
+                </a>
+            </div>
+        </aside>
+    </div>
+    <div id="main-content"></div>
+    <script src="{{ url_for('static', filename='js/main_dashb.js')}}"></script>
+</body>
+</html>

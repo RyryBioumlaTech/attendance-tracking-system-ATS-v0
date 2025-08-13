@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance-Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='icons/bootstrap-icons.css') }}">
+    <script src="{{ url_for('static', filename='js/html5-qrcode.min.js')}}"></script>
+
+    <style>
+        .btn {
+            padding: 10px 18px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+    </style>
+</head>
+<body style="background-color: black; color: white;">
+
+    <main>
+        <div class="pt-3 d-flex justify-content-center">
+            <h1>Hello, {{ user.name }}</h1>
+        </div>
+        <div class="d-flex flex-row gap-2 justify-content-center" style="text-align:center; margin-top: 20px;">
+            <button id="startBtn" class="btn btn-success">Start</button>
+            <button id="stopBtn" class="btn btn-danger" disabled>Stop</button>
+        </div>
+
+        <div class="scanner" style="margin-top: 20px; display: flex; justify-content: center;">
+            <div id="reader" style="width: 100%; height: 100%; border-radius: 8px;"></div>
+        </div>
+        <div class="alert alert-success d-flex align-items-center px-3 py-2 gap-2 mx-auto" id="alert" role="alert"  style="height: fit-content; width: fit-content; display: none !important;">
+            <i class="bi bi-check-circle-fill"></i>
+            <div>
+                Scan validated !
+            </div>
+        </div>
+        <div class="alert alert-danger d-flex align-items-center px-3 py-2 gap-2 mx-auto" id="alert2" role="alert"  style="height: fit-content; width: fit-content; display: none !important;">
+            <i class="bi bi-x-circle-fill"></i>
+            <div>
+                Scan again !
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dash.js')}}"></script>
+</body>
+</html>

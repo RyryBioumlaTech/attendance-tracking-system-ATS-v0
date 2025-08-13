@@ -1,0 +1,76 @@
+<div>
+
+    <div class="average_sec d-flex">
+        <div class="average">
+            <p class="label">Average Entry</p>
+            <p class="number">{{ stats.average_entry }}</p>
+        </div>
+        <div class="average">
+            <p class="label">Average Exit</p>
+            <p class="number">{{ stats.average_exit }}</p>
+        </div>
+        <div class="average">
+            <p class="label">Absence Rate</p>
+            <p class="number">{{ stats.absence_percentage }}</p>
+        </div>
+    </div>
+
+
+    <div class="table_sec">
+        <div>
+            <table class="mdrn_table ">
+                <thead>
+                    <tr>
+                        <th class="th1">Employee</th>
+                        <th >Date</th>
+                        <th >Entry Hour</th>
+                        <th >Exit Hour</th>
+                        <th >Work Time</th>
+                        <th class="th2">Status</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="table-body">
+            <table class="mdrn_table2">
+                <tbody>
+                    {% for row in report_rows %}
+                        <tr>
+                            <td class="td1">{{ row.name }}</td>
+                            <td>{{ row.date }}</td>
+                            <td>{{ row.entry }}</td>
+                            <td>{{ row.exit }}</td>
+                            <td>{{ row.work_time }}</td>
+                            <td class="td2">{{ row.status }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="table_sec">
+        <table class="mdrn_table">
+            <tr>
+                <th class="th1">Name</th>
+                <th>Number of Absences</th>
+                <th>Total Work Time</th>
+                <th>Average Work Time</th>
+                <th>Average Entry</th>
+                <th class="th2">Average Exit</th>
+            </tr>
+            {% for row in resume %}
+
+                <tr>
+                    <td class="td1">{{ row.name}}</td>
+                    <td>{{ row.nb_abs }}</td>
+                    <td>{{ row.total_work_time }}</td>
+                    <td>{{ row.mean_work_time }}</td>
+                    <td>{{ row.average_arrival }}</td>
+                    <td class="td2">{{ row.average_departure  }}</td>
+                </tr>
+
+            {% endfor %}
+        </table>
+    </div>
+</div>

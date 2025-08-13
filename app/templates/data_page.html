@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport {{ department.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/bootstrap.min.css')}}">
+    <style>
+        body {
+            font-family: "Times New Roman", serif;
+            color: #000;
+            background-color: #fff;
+        }
+        h1, h2 {
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 26px;
+        }
+        h2 {
+            font-size: 20px;
+            margin-top: 40px;
+        }
+        p {margin: 40px;
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-bottom: 30px;
+            margin-right: 200px;
+            margin-left: auto;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 6px 10px;
+            text-align: center;
+            width: 120px;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+        /* Impression propre */
+        @media print {
+            /* body {
+                margin: 20mm;
+            } */
+            table {
+                page-break-inside: auto;
+            }
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+            @page {
+                size: A4 landscape;
+                margin: 20mm;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Rapport {{ department.name }}</h1>
+    <p>Période du {{ start_date }} au {{ end_date }}</p>
+    
+    <h2>Vue par jour</h2>
+    <table>
+        <tr>
+            <th>Nom</th>
+            <th>Sexe</th>
+            <th>Poste</th>
+            <th>Date</th>
+            <th>Entrée</th>
+            <th>Sortie</th>
+            <th>Temps de travail</th>
+            <th>Statut</th>
+        </tr>
+        {% for row in report_rows %}
+            <tr>
+                <td>{{ row.name }}</td>
+                <td>{{ row.sex }}</td>
+                <td>{{ row.position }}</td>
+                <td>{{ row.date }}</td>
+                <td>{{ row.entry }}</td>
+                <td>{{ row.exit }}</td>
+                <td>{{ row.work_time }}</td>
+                <td>{{ row.status }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Vue par employé</h2>
+    <table>
+        <tr>
+            <th>Nom</th>
+            <th>Nombre d'absences</th>
+            <th>Total heures de travail</th>
+            <th>Moyenne heures de travail</th>
+            <th>Moyenne entrée</th>
+            <th>Moyenne sortie</th>
+        </tr>
+        {% for row in resume %}
+            <tr>
+                <td>{{ row.name}}</td>
+                <td>{{ row.nb_abs }}</td>
+                <td>{{ row.total_work_time }}</td>
+                <td>{{ row.mean_work_time }}</td>
+                <td>{{ row.average_arrival }}</td>
+                <td>{{ row.average_departure }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Statistiques de la structure</h2>
+    <table>
+        <tr>
+            <th>Entrée moyenne</th>
+            <th>Sortie moyenne</th>
+            <th>Absence globale (%)</th>
+        </tr>
+        <tr>
+            <td>{{ stats.average_entry }}</td>
+            <td>{{ stats.average_exit }}</td>
+            <td>{{ stats.absence_percentage }}</td>
+        </tr>
+    </table>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<div class="table_sec">
+    <table class="mdrn_table">
+        <tr>
+            <th class="th1">Name</th>
+            <th>Email</th>
+            <th>Sex</th>
+            <th>Department</th>
+            <th>Position</th>
+            <th class="th2">Actions</th>
+        </tr>
+        {% for emp in employee_list %}
+            <tr data-id="{{ emp.id }}" data-department-id="{{ emp.department_id }}" data-position-id="{{ emp.position_id }}">
+                <td class="name td1">{{ emp.name }}</td>
+                <td class="email">{{ emp.email }}</td>
+                <td class="sex">{{ emp.sex }}</td>
+                <td class="department">{{ emp.department }}</td>
+                <td class="position">{{ emp.position }}</td>
+                <td class="td2"><button class="btn-edit bg-success rounded-pill" style="margin-right: 20px; border: none; padding: 5px 10px; color: white;"><i class="bi bi-pencil-fill"></i> Edit </button><button class="btn-delete rounded-pill bg-danger" style="border: none; padding: 5px 10px; color: white;"><i class="bi bi-trash3-fill"></i> Delete </button></td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
