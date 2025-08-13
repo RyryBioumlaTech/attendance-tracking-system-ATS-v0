@@ -12,7 +12,7 @@
                     <input type="submit" value="Search" class="button">
                 </form>
             </div>
-            <button id="show_form" class="button">Register an employee</button>
+            <button id="show_form" class="button register-btn">Register an employee</button>
         </div>
 
         <div class="manager_data_table"></div>
@@ -61,15 +61,15 @@
             <div class="form_content">
             <div>
                 <label for="new_emp_name">Name</label>
-                <input type="text" name="new_emp_name" id="input_emp_name">
+                <input type="text" name="new_emp_name" id="input_emp_name" required>
             </div>
             <div>
                 <label for="new_emp_email">Email</label>
-                <input type="email" name="new_emp_email" id="input_emp_email">
+                <input type="email" name="new_emp_email" id="input_emp_email" required>
             </div>
             <div>
                 <label for="new_emp_sex">Sex</label>
-                <input type="text" name="new_emp_sex" id="input_emp_sex">
+                <input type="text" name="new_emp_sex" id="input_emp_sex" required>
             </div>
             <div class="d-flex justify-content-between">
                 <div>
@@ -91,11 +91,11 @@
             </div>
             <div>
                 <label for="emp_pass">Password</label>
-                <input type="password" name="emp_pass" id="input-emp_pass" autocomplete="new-password">
+                <input type="password" name="emp_pass" id="input-emp_pass" autocomplete="new-password" required>
             </div>
             <div>
                 <label for="confirm_emp_pass">Confirm password</label>
-                <input type="password" name="confirm_emp_pass" id="input_confirm_pass" autocomplete="new-password">
+                <input type="password" name="confirm_emp_pass" id="input_confirm_pass" autocomplete="new-password" required>
             </div>
             <button type="submit">Create</button>
             </div>

@@ -14,6 +14,24 @@ function loadsec(page){
 
 window.loadsec('reports')
 
+function showToast(message, duration = 5000) {
+    const container = document.querySelector('.toast-container');
+    const toast = document.createElement('div');
+    toast.classList.add('toast');
+    toast.textContent = message;
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, duration);
+}
+
+
 document.addEventListener('submit', function(e){
     if(e.target.matches('form') && e.target.id !== 'export_pdf_form'){
         e.preventDefault();
@@ -48,19 +66,19 @@ document.addEventListener('submit', function(e){
                 form.reset();
                 form.style.display = "none";
                 document.getElementById("input_id").value = "";
-                alert("Update Successfull");
+                showToast("Update Successful!")
             }
 
             if(form.action.endsWith('/create_admin')) {
                 form.reset();
                 form.style.display = "none";
-                alert("admin created");
+                showToast("admin created !");
                 window.loadsec('admin-manager')
             }
 
             if(form.action.endsWith('/create_emp')) {
                 form.reset();
-                alert("employee created");
+                showToast("employee created !");
             }
         })
         .catch(error => {
@@ -121,8 +139,8 @@ document.addEventListener("click", function (e){
                 return res.json();
             })
             .then(data => {
-                alert(data.message);
                 e.target.closest("tr").remove();
+                showToast("Employee deleted !")
             })
             .catch(error => {
                 console.error("Erreur :", error);
@@ -141,8 +159,8 @@ document.addEventListener("click", function (e){
                 return res.json();
             })
             .then(data => {
-                alert(data.message);
                 e.target.closest("tr").remove();
+                showToast("Admin deleted !")
             })
             .catch(error => {
                 console.error("Erreur :", error);

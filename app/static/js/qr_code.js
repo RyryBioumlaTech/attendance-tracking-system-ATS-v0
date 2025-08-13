@@ -66,7 +66,7 @@ window.onload = () => {
     syncQrUpdate();
 };
 
-function showToast(message, duration = 3000) {
+function showToast(message, duration = 10000) {
     const container = document.querySelector('.toast-container');
     const toast = document.createElement('div');
     toast.classList.add('toast');
