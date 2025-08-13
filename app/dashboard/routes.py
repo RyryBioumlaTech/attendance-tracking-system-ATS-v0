@@ -40,7 +40,7 @@ def load_datas():
     end_date = request.form.get('end_date')
 
     if not start_date or not end_date:
-        return "<p>Start date and end date are required.</p>"
+        return "<p class='mt-2'>Start date and end date are required.</p>"
     else :
         
         starting = datetime.strptime(start_date, "%Y-%m-%d").date()
@@ -87,12 +87,12 @@ def load_datas():
                     entry = checkpoints_in.moment.time()
                     out = "-:-"
                     work_time = None
-                    status = "undefined"
+                    status = "incomplete"
                 elif checkpoints_out and not checkpoints_in:
                     out = checkpoints_out.moment.time()
                     entry = "-:-"
                     work_time = None
-                    status = "undefined"
+                    status = "incomplete"
                 else:
                     entry = "-:-"
                     out = "-:-"
@@ -217,8 +217,19 @@ def update_infos_emp():
     emp_pos = request.form.get("emp_position")
     emp_dep = request.form.get("emp_department")
     emp_name = request.form.get("emp_name")
+
+    if not emp_name or emp_name.isdigit() or emp_name.strip() == "":
+        return "<p class='mt-2'>Enter a valid name !</p>"
+
     emp_email = request.form.get("emp_email")
+
+    if not emp_email or emp_email.isdigit() or emp_email.strip() == "":
+        return "<p class='mt-2'>Enter a valid email !</p>"
+
     emp_sex = request.form.get("emp_sex")
+
+    if not emp_sex or emp_sex.isdigit() or emp_sex.strip() == "" or (emp_sex.upper() != "F" and emp_sex.upper() != "M"):
+        return "<p class='mt-2'>Enter F or M in the Sex field !</p>"
 
     employee = Employee.query.filter(Employee.id==emp_id).first()
     emp_position = Position.query.filter(Position.name==emp_pos).first()
@@ -272,7 +283,16 @@ def create_emp_account():
     if not new_emp_name or not new_emp_email or not new_emp_sex or not new_emp_pos or not new_emp_dep or not emp_pass or not confirm_emp_pass:
         return '<p> Please fill all fields </p>'
     
-    if len(emp_pass)<6:
+    if new_emp_name.isdigit() or new_emp_name.strip() == "":
+        return "<p>Enter a valid name !</p>"
+    
+    if new_emp_email.isdigit() or new_emp_email.strip() == "":
+        return "<p>Enter a valid email !</p>"
+    
+    if new_emp_sex.isdigit() or new_emp_sex.strip() == "" or (new_emp_sex.upper() != "F" and new_emp_sex.upper() != "M"):
+        return "<p>Enter F or M in the Sex field !</p>"
+
+    if len(emp_pass)<6 or emp_pass.strip() == "":
         return '<p> Enter a 6 characters password at least </p>'
     
     if emp_pass != confirm_emp_pass:
@@ -296,7 +316,7 @@ def create_emp_account():
     db.session.add(emp)
     db.session.commit()
 
-    return '<p> Employee registration success </p>'
+    return '<div class="alert alert-success><p> Employee registration success </p></div>"'
 
 #export datas
 @dash_bp.route('/export_datas', methods=['POST'])

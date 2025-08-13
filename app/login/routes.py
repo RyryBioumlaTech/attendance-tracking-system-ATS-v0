@@ -27,7 +27,7 @@ def login():
         session['user_type'] = 'admin'
         return redirect(url_for('dashboard.admin_dash'))
     else:
-        flash('identifiants invalides !')
+        flash('identifiants invalides !', 'danger')
     return redirect(url_for('login.show'))
 
 
