@@ -1,5 +1,6 @@
 :root {
   --mind-vert: #1E7F4F;
+  --mind-light-vert: #24945C;
   --mind-rouge: #CE1126;
   --mind-jaune: #F1B82D;
   --bg-login: rgba(255, 255, 255, 0.95); 
@@ -81,7 +82,7 @@ button {
 }
 
 button:hover {
-    background-color: var(--mind-rouge);
+    background-color: var(--mind-light-vert);
 }
 
 #bg-net {

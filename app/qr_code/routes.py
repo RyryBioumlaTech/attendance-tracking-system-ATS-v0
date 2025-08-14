@@ -111,7 +111,7 @@ def validate():
 
     print('la signature est bonne ? ', compare_signature(recieved, expected), ' et le temps est valide ? ', current_timestamp - timestamp_recieved < timedelta(minutes=1), ' est deja enregistré ? ', nonce_recieved in used_nonces)
 
-    if (compare_signature(recieved, expected) and current_timestamp - timestamp_recieved < timedelta(minutes=1) and not(nonce_recieved in used_nonces)):
+    if (compare_signature(recieved, expected) and current_timestamp - timestamp_recieved < timedelta(minutes=1)):
 
         used_nonces.add(nonce_recieved)
 
