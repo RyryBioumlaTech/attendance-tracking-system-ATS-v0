@@ -68,6 +68,10 @@ window.onload = () => {
 
 function showToast(message, duration = 10000) {
     const container = document.querySelector('.toast-container');
+  
+    if (container.children.length >= 5) { 
+        container.firstChild.remove(); 
+    }
     const toast = document.createElement('div');
     toast.classList.add('toast');
     toast.textContent = message;
