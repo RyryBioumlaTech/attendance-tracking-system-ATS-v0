@@ -102,7 +102,6 @@ def validate():
     employee_id = current_user.id
     employee_name = current_user.name
 
-    # create the expected signature to compare to the reicieved one
     expected_input = json.dumps({"moment":moment_recieved, "nonce":nonce_recieved}, separators=(',',':'), sort_keys=True)
     expected = generate_signature(expected_input)
 
