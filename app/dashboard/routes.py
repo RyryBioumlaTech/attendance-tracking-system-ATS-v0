@@ -129,16 +129,18 @@ def load_datas():
         resume = df.groupby("name").agg(
             nb_abs = ("status", lambda x: (x=="absent").sum()),
             work_day = ("work_time", lambda x: x.notna().sum()),
-            total_work_time = ("work_time", "sum")
+            total_work_time = ("work_time", lambda x: round(sum([wt.total_seconds() for wt in x if pd.notnull(wt)]) / 3600))
         )
 
-        resume["mean_work_time"] = resume["total_work_time"] / resume["work_day"]
+        resume["mean_work_time"] = resume.apply(
+            lambda row: round(row["total_work_time"] / row["work_day"]) if row["work_day"] > 0 else 0, axis=1
+        )
 
         mean_arrival_emp = valid_entry.groupby("name")["entry"].apply(
-            lambda x: pd.to_datetime(x, format="%H:%M:%S", errors="coerce").mean().time() if not x.empty else None
+            lambda x: pd.to_datetime(x, format="%H:%M:%S", errors="coerce").mean().strftime("%H:%M:%S") if not x.empty else None
         )
         mean_departure_emp = valid_out.groupby("name")["exit"].apply(
-            lambda x: pd.to_datetime(x, format="%H:%M:%S", errors="coerce").mean().time() if not x.empty else None
+            lambda x: pd.to_datetime(x, format="%H:%M:%S", errors="coerce").mean().strftime("%H:%M:%S") if not x.empty else None
         )
 
         resume["average_arrival"] = mean_arrival_emp
@@ -423,16 +425,18 @@ def export():
         resume = df.groupby("name").agg(
             nb_abs = ("status", lambda x: (x=="absent").sum()),
             work_day = ("work_time", lambda x: x.notna().sum()),
-            total_work_time = ("work_time", "sum")
+            total_work_time = ("work_time", lambda x: round(sum([wt.total_seconds() for wt in x if pd.notnull(wt)]) / 3600))
         )
 
-        resume["mean_work_time"] = resume["total_work_time"] / resume["work_day"]
+        resume["mean_work_time"] = resume.apply(
+            lambda row: round(row["total_work_time"] / row["work_day"]) if row["work_day"] > 0 else 0, axis=1
+        )
 
         mean_arrival_emp = valid_entry.groupby("name")["entry"].apply(
-            lambda x: pd.to_datetime(x, format="%H:%M:%S", errors="coerce").mean().time() if not x.empty else None
+            lambda x: pd.to_datetime(x, format="%H:%M:%S", errors="coerce").mean().strftime("%H:%M:%S") if not x.empty else None
         )
         mean_departure_emp = valid_out.groupby("name")["exit"].apply(
-            lambda x: pd.to_datetime(x, format="%H:%M:%S", errors="coerce").mean().time() if not x.empty else None
+            lambda x: pd.to_datetime(x, format="%H:%M:%S", errors="coerce").mean().strftime("%H:%M:%S") if not x.empty else None
         )
 
         resume["average_arrival"] = mean_arrival_emp

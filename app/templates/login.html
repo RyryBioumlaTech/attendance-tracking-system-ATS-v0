@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATS</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/bootstrap.min.css')}}">
+{% extends "base.html" %}
+{% block title %}ATS{% endblock %}
+{% block styles %}
     <link rel="stylesheet" href="{{ url_for('static', filename='style/login.css')}}" media="screen">
-</head>
-<body>
-    <canvas id="bg-net"></canvas>
+{% endblock %}
+{% block content %}
+<canvas id="bg-net"></canvas>
     <form action="{{ url_for('login.login') }}" method="post">
         <h3>Sign UP</h3>
         <div>
@@ -34,8 +30,8 @@
             <button type="submit">Sign Up</button>
         </div>
     </form>
-    
-    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js')}}" ></script>
+{% endblock %}
+
+{% block scripts %}
     <script src="{{ url_for('static', filename='js/login.js')}}" ></script>
-</body>
-</html>
+{% endblock %}

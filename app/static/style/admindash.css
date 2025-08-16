@@ -417,3 +417,9 @@ thead {
     opacity: 1;
     transform: translateY(0);
 }
+
+.admin-manager{
+    margin-right: 70%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
