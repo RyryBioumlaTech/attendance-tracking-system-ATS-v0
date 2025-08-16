@@ -8,7 +8,7 @@ function loadsec(page){
         document.getElementById('main-content').innerHTML=html;
     })
     .catch(error => {
-        document.getElementById('main-content').innerHTML='<p>Erreur de chargement des données</p>'
+        document.getElementById('main-content').innerHTML='<div class="alert alert-warning mt-3" style="width:300px;"><p>Erreur de chargement des données</p></div>'
     })
 }
 
@@ -80,7 +80,9 @@ document.addEventListener('submit', function(e){
         })
         .catch(error => {
             const target = document.querySelector(targetSelector);
-            if(target) target.innerHTML = '<p>Erreur de chargement des données</p>';
+            form.reset();
+            form.style.display = "none";
+            if(target) target.innerHTML = '<div class="alert alert-danger mt-3" style="width:350px;"><p class="d-flex align-items-center">Erreur de chargement des données</p></div>';
         });
     }
 });

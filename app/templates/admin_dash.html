@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATS | admin-dashbord</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/bootstrap.min.css')}}">
+{% extends "base.html" %}
+{% block title %}ATS | admin-dashbord{% endblock %} 
+{% block styles %}    
     <link rel="stylesheet" href="{{ url_for('static', filename='icons/bootstrap-icons.css') }}">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style/admindash.css')}}">
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
     <div class="toast-container"></div>
     <div class="wrapper">
         <aside id="sidebar">
@@ -39,6 +36,7 @@
         </aside>
     </div>
     <div id="main-content"></div>
+{% endblock %}
+{% block scripts %}
     <script src="{{ url_for('static', filename='js/main_dashb.js')}}"></script>
-</body>
-</html>
+{% endblock %}

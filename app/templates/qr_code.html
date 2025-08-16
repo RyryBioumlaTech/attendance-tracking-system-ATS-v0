@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATS | Qr-code</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/bootstrap.min.css')}}">
+{% extends "base.html" %}
+{% block title %}ATS | Qr-code{% endblock %}
+{% block styles %}
     <link rel="stylesheet" href="{{ url_for('static', filename='style/qrcode.css')}}">
-</head>
-<body style="background-color: #f1f1f1;">
+{% endblock %}
+
+{% block content %}
     <canvas id="bg-net"></canvas>
     <div class="toast-container"></div>
     <main>
@@ -27,7 +24,8 @@
             </article>
         </div>
     </main>
+{% endblock %}
+{% block scripts %}    
     <script src="{{ url_for('static', filename='js/socket.io.min.js')}}"></script>
     <script src="{{ url_for('static', filename='js/qr_code.js')}}" ></script>
-</body>
-</html>
+{% endblock %}
