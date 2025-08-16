@@ -163,4 +163,4 @@ function resize() {
         window.addEventListener('resize', resize);
         resize();
         requestAnimationFrame(step);
-        })();            
+        })();  
