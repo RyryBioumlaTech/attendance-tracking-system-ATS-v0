@@ -1,4 +1,4 @@
-from flask import render_template, request, send_file, jsonify
+from flask import render_template, request, send_file, jsonify,flash
 from app.dashboard import dash_bp
 from app.models import Department, db, Employee, Checkpoints, Position, Admin
 from flask_login import login_required, current_user
@@ -11,17 +11,10 @@ import pandas as pd
 import io
 
 
-@dash_bp.route('/dashboard')
-@login_required
-@employee_required
-def user_dash():
-    return render_template('dash_user.html', user = current_user)
-
 @dash_bp.route('/admin_dash')
 @login_required
 @admin_required
 def admin_dash():
-    print(current_user.role)
     return render_template('admin_dash.html', user=current_user)
 
 @dash_bp.route('/load/reports')
@@ -40,7 +33,7 @@ def load_datas():
     end_date = request.form.get('end_date')
 
     if not start_date or not end_date:
-        return "<p class='mt-2'>Start date and end date are required.</p>"
+        return "<div class='alert alert-warning mt-3' style='width:400px;'><p>Start date and end date are required.</p></div>"
     else :
         
         starting = datetime.strptime(start_date, "%Y-%m-%d").date()
@@ -213,29 +206,27 @@ def update_infos_emp():
     if emp_id and emp_id.strip():
         emp_id = int(emp_id)
     else:
-        return "<p>Employee ID is required.</p>", 400
+        return "<div class='alert alert-warning mt-3' style='width:400px;'><p>Employee ID is required.</p></div>", 400
     emp_pos = request.form.get("emp_position")
     emp_dep = request.form.get("emp_department")
     emp_name = request.form.get("emp_name")
 
     if not emp_name or emp_name.isdigit() or emp_name.strip() == "":
-        return "<p class='mt-2'>Enter a valid name !</p>"
+        return "<div class='alert alert-warning mt-3' style='width:400px;'><p>Enter a valid name !</p></div>", 400
 
     emp_email = request.form.get("emp_email")
 
     if not emp_email or emp_email.isdigit() or emp_email.strip() == "":
-        return "<p class='mt-2'>Enter a valid email !</p>"
+        return "<div class='alert alert-warning mt-3' style='width:400px;'><p>Enter a valid email !</p></div>", 400
 
     emp_sex = request.form.get("emp_sex")
 
     if not emp_sex or emp_sex.isdigit() or emp_sex.strip() == "" or (emp_sex.upper() != "F" and emp_sex.upper() != "M"):
-        return "<p class='mt-2'>Enter F or M in the Sex field !</p>"
+        return "<div class='alert alert-warning mt-3' style='width:400px;'><p>Enter F or M in the Sex field !</p></div>", 400
 
     employee = Employee.query.filter(Employee.id==emp_id).first()
     emp_position = Position.query.filter(Position.name==emp_pos).first()
     emp_department = Department.query.filter(Department.id==emp_dep).first()
-
-    print('le depatement de cet employé est ', emp_dep)
     
     if employee is not None :
         employee.name = emp_name
@@ -281,28 +272,28 @@ def create_emp_account():
     confirm_emp_pass = request.form.get('confirm_emp_pass')
 
     if not new_emp_name or not new_emp_email or not new_emp_sex or not new_emp_pos or not new_emp_dep or not emp_pass or not confirm_emp_pass:
-        return '<p> Please fill all fields </p>'
+        return '<div class="alert alert-warning"><p> Please fill all fields !</p></div>'
     
     if new_emp_name.isdigit() or new_emp_name.strip() == "":
-        return "<p>Enter a valid name !</p>"
+        return '<div class="alert alert-warning"><p>Enter a valid name !</p></div>'
     
     if new_emp_email.isdigit() or new_emp_email.strip() == "":
-        return "<p>Enter a valid email !</p>"
+        return '<div class="alert alert-warning"><p>Enter a valid email !</p></div>'
     
     if new_emp_sex.isdigit() or new_emp_sex.strip() == "" or (new_emp_sex.upper() != "F" and new_emp_sex.upper() != "M"):
-        return "<p>Enter F or M in the Sex field !</p>"
+        return '<div class="alert alert-warning"><p>Enter F or M in the Sex field !</p></div>'
 
     if len(emp_pass)<6 or emp_pass.strip() == "":
-        return '<p> Enter a 6 characters password at least </p>'
+        return '<div class="alert alert-warning"><p> Enter a 6 characters password at least </p></div>'
     
     if emp_pass != confirm_emp_pass:
-        return '<p> confirm password does not match </p>'
+        return '<div class="alert alert-warning"><p> confirm password does not match </p></div>'
     
     employee_by_email = Employee.query.filter(Employee.email == new_emp_email).all()
     employee_by_name = Employee.query.filter(Employee.name == new_emp_name).all()
 
     if employee_by_email or employee_by_name:
-        return '<p> This employee is already registered </p>'
+        return '<div class="alert alert-warning"><p> This employee is already registered </p></div>'
     
     emp = Employee(
         name = new_emp_name, #type: ignore
@@ -316,7 +307,7 @@ def create_emp_account():
     db.session.add(emp)
     db.session.commit()
 
-    return '<div class="alert alert-success><p> Employee registration success </p></div>"'
+    return '<div class="alert alert-success"><p> Employee registration success </p></div>"'
 
 #export datas
 @dash_bp.route('/export_datas', methods=['POST'])
@@ -429,8 +420,6 @@ def export():
         regular_entry = df_entry_data.dt.time.mode().iloc[0] if not df_entry_data.empty else None
         regular_exit = df_exit_data.dt.time.mode().iloc[0] if not df_exit_data.empty else None
 
-        #work_time_per_employee = periode.groupby("name")["work_time"].sum()
-
         resume = df.groupby("name").agg(
             nb_abs = ("status", lambda x: (x=="absent").sum()),
             work_day = ("work_time", lambda x: x.notna().sum()),
@@ -482,6 +471,7 @@ def delete_employee(id):
     db.session.delete(employee)
     db.session.commit()
     return jsonify({'message': 'Employé supprimé avec succès'})
+
 
 @dash_bp.route('/delete_admin/<int:id>', methods=['DELETE'])
 @login_required

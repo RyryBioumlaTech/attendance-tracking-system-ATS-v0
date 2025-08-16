@@ -76,10 +76,7 @@ document.addEventListener('submit', function(e){
                 window.loadsec('admin-manager')
             }
 
-            if(form.action.endsWith('/create_emp')) {
-                form.reset();
-                showToast("employee created !");
-            }
+            
         })
         .catch(error => {
             const target = document.querySelector(targetSelector);

@@ -56,48 +56,49 @@
            </div>
         </form>
             
-        <form action="/create_emp" method="post" data-target=".message_status" id="register_form" style="display: none;">
+        <form action="/create_emp" data-target=".message" method="post" id="register_form" style="display: none;">
 
             <div class="form_content">
-            <div>
-                <label for="new_emp_name">Name</label>
-                <input type="text" name="new_emp_name" id="input_emp_name" required>
-            </div>
-            <div>
-                <label for="new_emp_email">Email</label>
-                <input type="email" name="new_emp_email" id="input_emp_email" required>
-            </div>
-            <div>
-                <label for="new_emp_sex">Sex</label>
-                <input type="text" name="new_emp_sex" id="input_emp_sex" required>
-            </div>
-            <div class="d-flex justify-content-between">
+                <div class="message"></div>
                 <div>
-                    <label for="new_emp_position">Position</label>
-                    <select name="new_emp_position" id="input_emp_position">
-                        {% for pos in positions %}
-                            <option value="{{ pos.id}}">{{ pos.name }}</option>
-                        {% endfor %}
-                    </select>
+                    <label for="new_emp_name">Name</label>
+                    <input type="text" name="new_emp_name" id="input_emp_name" required>
                 </div>
                 <div>
-                    <label for="nenw_emp_department">Department</label>
-                    <select name="new_emp_department" id="input_emp_department">
-                        {% for dep in departments %}
-                            <option value="{{ dep.id}}">{{ dep.name }}</option>
-                        {% endfor %}
-                    </select>
+                    <label for="new_emp_email">Email</label>
+                    <input type="email" name="new_emp_email" id="input_emp_email" required>
                 </div>
-            </div>
-            <div>
-                <label for="emp_pass">Password</label>
-                <input type="password" name="emp_pass" id="input-emp_pass" autocomplete="new-password" required>
-            </div>
-            <div>
-                <label for="confirm_emp_pass">Confirm password</label>
-                <input type="password" name="confirm_emp_pass" id="input_confirm_pass" autocomplete="new-password" required>
-            </div>
-            <button type="submit">Create</button>
+                <div>
+                    <label for="new_emp_sex">Sex</label>
+                    <input type="text" name="new_emp_sex" id="input_emp_sex" required>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <label for="new_emp_position">Position</label>
+                        <select name="new_emp_position" id="input_emp_position">
+                            {% for pos in positions %}
+                                <option value="{{ pos.id}}">{{ pos.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="nenw_emp_department">Department</label>
+                        <select name="new_emp_department" id="input_emp_department">
+                            {% for dep in departments %}
+                                <option value="{{ dep.id}}">{{ dep.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label for="emp_pass">Password</label>
+                    <input type="password" name="emp_pass" id="input-emp_pass" autocomplete="new-password" required>
+                </div>
+                <div>
+                    <label for="confirm_emp_pass">Confirm password</label>
+                    <input type="password" name="confirm_emp_pass" id="input_confirm_pass" autocomplete="new-password" required>
+                </div>
+                <button type="submit">Create</button>
             </div>
         </form>
     </div>

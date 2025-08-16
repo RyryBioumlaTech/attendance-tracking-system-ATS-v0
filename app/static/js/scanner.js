@@ -23,8 +23,6 @@ function onScanSuccess(result) {
     .then(data => {
         if (data.valid) {
             html5QrCode.stop();
-            document.getElementById("startBtn").disabled = false;
-            document.getElementById("stopBtn").disabled = true;
             document.getElementById("alert").style.display = "block";
 
             setTimeout(() => {
@@ -37,10 +35,7 @@ function onScanSuccess(result) {
 
         } else {
             html5QrCode.stop();
-            document.getElementById("startBtn").disabled = false;
-            document.getElementById("stopBtn").disabled = true;
             document.getElementById("alert2").style.display = "block";
-
             setTimeout(() => {
                 const alertBox = document.getElementById("alert2");
                 if (alertBox) {
@@ -66,21 +61,11 @@ document.getElementById("startBtn").addEventListener("click", () => {
                 onScanSuccess
             ).then(() => {
                 isScanning = true;
-                document.getElementById("startBtn").disabled = true;
-                document.getElementById("stopBtn").disabled = false;
             });
         } else {
             alert("Aucune caméra trouvée");
         }
     }).catch(err => {
         console.error("Erreur d'accès caméra", err);
-    });
-});
-
-document.getElementById("stopBtn").addEventListener("click", () => {
-    html5QrCode.stop().then(() => {
-        document.getElementById("startBtn").disabled = false;
-        document.getElementById("stopBtn").disabled = true;
-        isScanning = false;
     });
 });
