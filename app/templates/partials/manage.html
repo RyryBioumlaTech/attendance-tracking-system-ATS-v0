@@ -2,7 +2,7 @@
     <h2>MANAGER</h2>
     <div>
         <div class="manage_form_sec">
-            <div class="">
+            <div>
                 <form action="/load/manage_data" method="post" data-target=".manager_data_table" class="d-flex flex-row gap-2">
                     <select name="department_id" id="" class="general-input">
                         {% for dep in departments %}
@@ -23,20 +23,20 @@
            <div class="form_content">
                 <input type="hidden" name="emp_id" id="input_id">
                 <div>
-                    <label for="emp_name">Name</label>
+                    <label for="input_name">Name</label>
                     <input type="text" name="emp_name" id="input_name">
                 </div>
                 <div>
-                    <label for="emp_email">Email</label>
+                    <label for="input_email">Email</label>
                     <input type="email" name="emp_email" id="input_email">
                 </div>
                 <div>
-                    <label for="emp_sex">Sex</label>
+                    <label for="input_sex">Sex</label>
                     <input type="text" name="emp_sex" id="input_sex">
                 </div>
                 <div class="d-flex justify-content-between">
                     <div>
-                        <label for="nemp_position">Position</label>
+                        <label for="input_position">Position</label>
                         <select name="emp_position" id="input_position">
                             {% for pos in positions %}
                                 <option value="{{ pos.id}}">{{ pos.name }}</option>
@@ -44,7 +44,7 @@
                         </select>
                     </div>
                     <div>
-                        <label for="emp_department">Department</label>
+                        <label for="input_department">Department</label>
                         <select name="emp_department" id="input_department">
                             {% for dep in departments %}
                                 <option value="{{ dep.id}}">{{ dep.name }}</option>
@@ -61,20 +61,20 @@
             <div class="form_content">
                 <div class="message"></div>
                 <div>
-                    <label for="new_emp_name">Name</label>
+                    <label for="input_emp_name">Name</label>
                     <input type="text" name="new_emp_name" id="input_emp_name" required>
                 </div>
                 <div>
-                    <label for="new_emp_email">Email</label>
+                    <label for="input_emp_email">Email</label>
                     <input type="email" name="new_emp_email" id="input_emp_email" required>
                 </div>
                 <div>
-                    <label for="new_emp_sex">Sex</label>
+                    <label for="input_emp_sex">Sex</label>
                     <input type="text" name="new_emp_sex" id="input_emp_sex" required>
                 </div>
                 <div class="d-flex justify-content-between">
                     <div>
-                        <label for="new_emp_position">Position</label>
+                        <label for="input_emp_position">Position</label>
                         <select name="new_emp_position" id="input_emp_position">
                             {% for pos in positions %}
                                 <option value="{{ pos.id}}">{{ pos.name }}</option>
@@ -82,7 +82,7 @@
                         </select>
                     </div>
                     <div>
-                        <label for="nenw_emp_department">Department</label>
+                        <label for="input_emp_department">Department</label>
                         <select name="new_emp_department" id="input_emp_department">
                             {% for dep in departments %}
                                 <option value="{{ dep.id}}">{{ dep.name }}</option>
@@ -91,11 +91,11 @@
                     </div>
                 </div>
                 <div>
-                    <label for="emp_pass">Password</label>
-                    <input type="password" name="emp_pass" id="input-emp_pass" autocomplete="new-password" required>
+                    <label for="input_emp_pass">Password</label>
+                    <input type="password" name="emp_pass" id="input_emp_pass" autocomplete="new-password" required>
                 </div>
                 <div>
-                    <label for="confirm_emp_pass">Confirm password</label>
+                    <label for="input_confirm_pass">Confirm password</label>
                     <input type="password" name="confirm_emp_pass" id="input_confirm_pass" autocomplete="new-password" required>
                 </div>
                 <button type="submit">Create</button>
