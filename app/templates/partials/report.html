@@ -16,11 +16,16 @@
                 </form>
             </div>
             <div style="width: fit-content;">
-                <form action="/export_datas" method="post" target="_blank" id="export_pdf_form">
+                <form action="/export_datas" method="post" target="_blank" class="d-flex flex-row gap-2" id="export_pdf_form">
                     <input type="hidden" name="exp_dep_id" id="exp_dep_id">
                     <input type="hidden" name="exp_start_date" id="exp_start_date">
                     <input type="hidden" name="exp_end_date" id="exp_end_date">
-                    <input type="submit" value="Export PDF" id="exp-btn" class="button">
+                    <select name="export_type" id="exp_type" class="general-input">
+                        <option value="excel">excel</option>
+                        <option value="pdf">pdf</option>
+                        <option value="csv">csv</option>
+                    </select>
+                    <input type="submit" value="Export" id="exp-btn" class="button">
                 </form>
             </div>
         </div>

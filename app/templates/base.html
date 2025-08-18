@@ -6,12 +6,30 @@
     <title>{% block title %}ATS | MINDDEVEL{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style/bootstrap.min.css')}}">
 
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}" crossorigin="use-credentials">
+
+    <meta name="theme-color" content="#1E7F4F">
+    
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("{{ url_for('static', filename='service-worker.js') }}")
+            .then(reg => console.log("SW enregistré:", reg))
+            .catch(err => console.error("SW erreur:", err));
+        }
+    </script>
+
     {% block styles %}{% endblock %}
 
 </head>
-<body>
+<body style="opacity:0">
     {% block content %}{% endblock %}
 
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+    document.body.style.transition = "opacity 0.5s";
+    document.body.style.opacity = 1;
+    });
+    </script>
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
     {% block scripts %}{% endblock %}
 </body>

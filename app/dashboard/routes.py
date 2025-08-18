@@ -1,12 +1,11 @@
-from flask import render_template, request, send_file, jsonify,flash
+from flask import render_template, request, send_file, jsonify
 from app.dashboard import dash_bp
 from app.models import Department, db, Employee, Checkpoints, Position, Admin
 from flask_login import login_required, current_user
 from collections import defaultdict
 from datetime import timedelta, datetime, time
-from sqlalchemy import desc
 from weasyprint import HTML
-from app.utils import admin_required, employee_required
+from app.utils import admin_required
 import pandas as pd 
 import io
 
@@ -319,6 +318,7 @@ def export():
     department_id = request.form.get('exp_dep_id')
     start_date = request.form.get('exp_start_date')
     end_date = request.form.get('exp_end_date')
+    export_type = request.form.get('export_type')
 
     if not start_date or not end_date:
         return "<p>Start date and end date are required.</p>"
@@ -453,19 +453,45 @@ def export():
             "frequent_departure": regular_exit.strftime("%H:%M:%S") if regular_exit else "N/A"
         }
 
-    rendered = render_template('data_page.html', report_rows=cleaned_rows, stats=stats, resume=resume_template, department=department,
-                           start_date=start_date, end_date=end_date)
-    
-    buffer = io.BytesIO()
-    HTML(string=rendered, base_url=request.root_path).write_pdf(buffer)
-    buffer.seek(0)
-
-    return send_file(
-        buffer,
-        as_attachment=True,
-        download_name='export_datas.pdf',
-        mimetype='application/pdf'
+    df_export = df.copy()
+    df_export["work_time"] = df_export["work_time"].apply(
+        lambda td: f"{td.seconds//3600:02d}:{(td.seconds%3600)//60:02d}" if pd.notnull(td) else ""
     )
+
+    if export_type == 'csv':
+        buffer = io.StringIO()
+        df_export.to_csv(buffer, index=False)
+        buffer.seek(0)
+        return send_file(
+            io.BytesIO(buffer.getvalue().encode()),
+            as_attachment=True,
+            download_name="export_datas.csv",
+            mimetype="text/csv"
+        )
+    elif export_type == 'excel':
+        buffer = io.BytesIO()
+        df_export.to_excel(buffer, index=False, engine='openpyxl')
+        buffer.seek(0)
+        return send_file(
+            buffer,
+            as_attachment=True,
+            download_name="export_datas.xlsx",
+            mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+    else: 
+        rendered = render_template('data_page.html', report_rows=cleaned_rows, stats=stats, resume=resume_template, department=department,
+                            start_date=start_date, end_date=end_date)
+        
+        buffer = io.BytesIO()
+        HTML(string=rendered, base_url=request.root_path).write_pdf(buffer)
+        buffer.seek(0)
+
+        return send_file(
+            buffer,
+            as_attachment=True,
+            download_name='export_datas.pdf',
+            mimetype='application/pdf'
+        )
 
 @dash_bp.route('/delete_employee/<int:id>', methods=['DELETE'])
 @login_required

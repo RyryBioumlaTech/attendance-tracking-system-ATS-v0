@@ -1,0 +1,45 @@
+{
+  "short_name": "ATS",
+  "name": "ATS-MINDDEVEL",
+  "description": "Minddevel Attendance Tracking System",
+  "icons": [
+    {
+      "src": "/static/icons/qr-code.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1E7F4F",
+  "shortcuts": [
+    {
+      "name": "Scanner QR Code",
+      "short_name": "Scanner",
+      "description": "Ouvrir la page de scan des employés",
+      "url": "/scanner",
+      "icons": [
+        {
+          "src": "/static/icons/qr-code.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+        "src": "/static/screenshots/screen.jpg",
+        "sizes": "720x1600",
+        "type": "image/jpg"
+    },
+    {
+        "src": "/static/screenshots/screen2.png",
+        "sizes": "1355x685",
+        "type": "image/png",
+        "form_factor": "wide"
+    }
+    ]
+}
