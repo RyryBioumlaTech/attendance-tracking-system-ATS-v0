@@ -51,6 +51,16 @@ def load_datas():
         status = None
         new_report_rows = []
         on_time = time(8, 30)
+
+        total_check =  Checkpoints.query.filter(
+                    Checkpoints.moment >= start_date,
+                    Checkpoints.moment <= end_date
+                ).order_by(Checkpoints.moment).first()
+        
+        if (starting > ending):
+            return "<div class='alert alert-warning mt-3' style='width:400px;'><p>Selectionner une periode valide!</p></div>"
+        elif not total_check:
+            return "<div class='alert alert-info mt-3' style='width:400px;'><p>Aucune données disponible pour cette periode</p></div>"
         
         for employee in employees:
             for date in dates:
@@ -342,6 +352,8 @@ def export():
         new_report_rows = []
         on_time = time(8, 30)
         
+        checkpoints_in = []
+        checkpoints_out = []
         for employee in employees:
             for date in dates:
                 checkpoints_in = Checkpoints.query.filter(
@@ -390,6 +402,9 @@ def export():
                     'work_time': work_time,
                     'status': status
                 })
+
+        if not checkpoints_in and not checkpoints_out:
+            return "<p>Aucune données à exporter</p>"
 
         cleaned_rows = [
             row for row in new_report_rows
