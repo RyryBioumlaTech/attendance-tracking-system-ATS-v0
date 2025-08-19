@@ -1,7 +1,5 @@
 :root {
-  --mind-vert: #1E7F4F;
-  --mind-rouge: #CE1126;
-  --mind-jaune: #F1B82D;
+  --green: #1E7F4F;
   --bg-login: rgba(255, 255, 255, 0.95); 
   --input-bg: rgba(240, 240, 240, 1); 
   --text-color: #111; 
@@ -83,7 +81,7 @@ img {
     position: fixed;
     inset: 0;
     z-index: -1;          /* derrière ton contenu */
-    background: var(--mind-vert);  /* couleur du fond */
+    background: var(--green);  /* couleur du fond */
 }
 
 .toast-container {
