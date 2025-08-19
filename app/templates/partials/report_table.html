@@ -50,27 +50,37 @@
     </div>
     
     <div class="table_sec">
-        <table class="mdrn_table">
-            <tr>
-                <th class="th1">Name</th>
-                <th>Number of Absences</th>
-                <th>Total Work Time(h)</th>
-                <th>Work Time/day(h)</th>
-                <th>Average Entry</th>
-                <th class="th2">Average Exit</th>
-            </tr>
-            {% for row in resume %}
+        <div>
+            <table class="mdrn_table ">
+                <thead>
+                    <tr>
+                        <th class="th1">Name</th>
+                        <th>Absences</th>
+                        <th>Total Work Time(h)</th>
+                        <th>Work Time/day(h)</th>
+                        <th>Average Entry</th>
+                        <th class="th2">Average Exit</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="table-body">
+            <table class="mdrn_table2">
+                <tbody>
+                   {% for row in resume %}
 
-                <tr>
-                    <td class="td1">{{ row.name}}</td>
-                    <td>{{ row.nb_abs }}</td>
-                    <td>{{ row.total_work_time }}</td>
-                    <td>{{ row.mean_work_time }}</td>
-                    <td>{{ row.average_arrival }}</td>
-                    <td class="td2">{{ row.average_departure  }}</td>
-                </tr>
+                        <tr>
+                            <td class="td1">{{ row.name}}</td>
+                            <td>{{ row.nb_abs }}</td>
+                            <td>{{ row.total_work_time }}</td>
+                            <td>{{ row.mean_work_time }}</td>
+                            <td>{{ row.average_arrival }}</td>
+                            <td class="td2">{{ row.average_departure  }}</td>
+                        </tr>
 
-            {% endfor %}
-        </table>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>    
     </div>
 </div>

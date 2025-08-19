@@ -1,8 +1,6 @@
 :root {
-  --mind-vert: #1E7F4F;
-  --mind-light-vert: #24945C;
-  --mind-rouge: #CE1126;
-  --mind-jaune: #F1B82D;
+  --green: #1E7F4F;
+  --lgreen: #24945C;
   --bg-login: rgba(255, 255, 255, 0.95); 
   --input-bg: rgba(240, 240, 240, 1); 
   --text-color: #111; 
@@ -41,7 +39,7 @@ h3 {
     font-weight: 500;
     text-align: center;
     margin-bottom: 30px;
-    color: var(--mind-vert);
+    color: var(--green);
 }
 
 label {
@@ -70,7 +68,7 @@ input {
 button {
     margin-top: 60px;
     width: 100%;
-    background-color: var(--mind-vert);
+    background-color: var(--green);
     color: white;
     padding: 12px 0;
     font-size: 16px;
@@ -82,19 +80,47 @@ button {
 }
 
 button:hover {
-    background-color: var(--mind-light-vert);
+    background-color: var(--lgreen);
+    color: white;
 }
 
 #bg-net {
     position: fixed;
     inset: 0;
     z-index: -1;         
-    background: var(--mind-vert); 
+    background: var(--green); 
 }
 
 @media (max-width: 900px) {
     form {
+        margin-top: -80px;
         width: 90%;
         padding: 40px 20px;
+        border: none;
+        background-color: transparent;
+        box-shadow: none;
+    }
+    form label {
+        color: white;
+    }
+    button {
+        margin-top: 60px;
+        width: 100%;
+        background-color: white;
+        color: var(--green);
+        padding: 12px 0;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+    h3 {
+        font-size: 28px;
+        font-weight: 500;
+        text-align: center;
+        margin-bottom: 30px;
+        color: white;
     }
 }

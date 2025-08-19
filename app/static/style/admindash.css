@@ -1,7 +1,7 @@
 :root {
-  --mind-vert: #1E7F4F;
-  --mind-rouge: #CE1126;
-  --mind-jaune: #F1B82D;
+  --green: #1E7F4F;
+  --red: #CE1126;
+  --blue: #3a4adf;
   --bg: #f5f5f5;
   --bg-login: rgba(255, 255, 255, 0.95); 
   --input-bg: rgba(240, 240, 240, 1); 
@@ -53,7 +53,7 @@ body {
     transition: all .25s ease-in-out;
     display: flex;
     flex-direction: column;
-    background-color: var(--mind-vert);
+    background-color: var(--green);
     position: fixed;
     top: 0;
     left: 0;
@@ -89,8 +89,13 @@ a {
 a.sidebar-link:hover {
     background-color: rgb(255, 255, 255, .075);
     border-left: 3px solid #ff512f;
+    transition: 0.3s ease-in-out;
 }
 
+a.sidebar-link.active{
+    background-color: rgb(255, 255, 255, .075);
+    border-left: 3px solid #ff512f;
+}
 
 .sidebar-item i {
     color: white;
@@ -208,7 +213,7 @@ a.sidebar-link:hover {
 .form_content button{
     margin-top: 50px;
     width: 100%;
-    background-color: var(--mind-vert);
+    background-color: var(--green);
     color: #ffffff;
     padding: 7px 0;
     font-size: 18px;
@@ -261,8 +266,8 @@ label{
   justify-content: center;
   align-items: center;
   padding: 5px 10px;
-  background-color: var(--mind-vert);
-  outline: 3px var(--mind-vert) solid;
+  background-color: var(--green);
+  outline: 3px var(--green) solid;
   outline-offset: -3px;
   border-radius: 5px;
   border: none;
@@ -276,7 +281,7 @@ label{
 
 .button:hover {
   background-color: transparent;
-  color: #080710;
+  color: var(--green);
 }
 
 .general-input {
@@ -295,14 +300,14 @@ label{
 }
 
 #exp-btn, .register-btn {
-    background-color: var(--mind-jaune);
+    background-color: var(--blue);
     color: white;
-    outline: 3px var(--mind-jaune) solid;
+    outline: 3px var(--blue) solid;
 }
 
 #exp-btn:hover, .register-btn:hover {
     background-color: transparent;
-    color: var(--mind-jaune) !important;
+    color: var(--blue) !important;
 }
 
 th{
