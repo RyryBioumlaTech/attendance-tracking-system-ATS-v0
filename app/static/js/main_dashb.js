@@ -32,11 +32,14 @@ function showToast(message, duration = 5000) {
 }
 
 
+
 document.addEventListener('submit', function(e){
     if(e.target.matches('form') && e.target.id !== 'export_pdf_form'){
         e.preventDefault();
         const form = e.target;
         const targetSelector = form.dataset.target
+        const spinner = document.querySelector(".global-spinner");
+        spinner.style.display = "block";
         fetch(form.action, {
             method: 'POST',
             body: new FormData(form)
@@ -46,7 +49,8 @@ document.addEventListener('submit', function(e){
             return response.text();
         })
         .then(html => {
-            
+
+            spinner.style.display = "none";
             const target = document.querySelector(targetSelector) ;
             if(target) target.innerHTML = html;
 
@@ -79,6 +83,7 @@ document.addEventListener('submit', function(e){
             
         })
         .catch(error => {
+            spinner.style.display = "none";
             const target = document.querySelector(targetSelector);
             form.reset();
             form.style.display = "none";
