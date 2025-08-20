@@ -10,14 +10,6 @@
 
     <meta name="theme-color" content="#1E7F4F">
     
-    <script>
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("{{ url_for('static', filename='service-worker.js') }}")
-            .then(reg => console.log("SW enregistré:", reg))
-            .catch(err => console.error("SW erreur:", err));
-        }
-    </script>
-
     {% block styles %}{% endblock %}
 
 </head>

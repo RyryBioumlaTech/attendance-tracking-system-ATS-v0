@@ -53,8 +53,8 @@ def load_datas():
         on_time = time(8, 30)
 
         total_check =  Checkpoints.query.filter(
-                    Checkpoints.moment >= start_date,
-                    Checkpoints.moment <= end_date
+                    Checkpoints.moment >= datetime.combine(starting, datetime.min.time()),
+                    Checkpoints.moment <= datetime.combine(ending, datetime.max.time())
                 ).order_by(Checkpoints.moment).first()
         
         if (starting > ending):
