@@ -71,10 +71,11 @@ class Employee(UserMixin, db.Model):
     __tablename__ = 'employee'
 
     id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(20), nullable = False, unique = True)
+    name = db.Column(db.String(20), nullable = False, unique = False)
+    surname = db.Column(db.String(20), nullable = True, unique = False)
     email = db.Column(db.String(20), unique = True, nullable = False)
     password = db.Column(db.String(255), nullable = False)
-    sex = db.Column(db.String(1), nullable = False)
+    sex = db.Column(db.String(6), nullable = False)
 
     department_id = db.Column(db.Integer, db.ForeignKey('department.id'), nullable = False)
     position_id = db.Column(db.Integer, db.ForeignKey('position.id'), nullable = False )
@@ -106,9 +107,3 @@ class Checkpoints(db.Model):
 
     def __repr__(self):
         return f'<Checkpoints {self.moment}>'
-
-admin_employee = db.Table(
-    'admin_employee',
-    db.Column('admin_id', db.Integer, db.ForeignKey('admin.id'), primary_key=True),
-    db.Column('employee_id', db.Integer, db.ForeignKey('employee.id'), primary_key=True)
-)
