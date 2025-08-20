@@ -96,7 +96,9 @@ document.addEventListener("click", function (e){
     if(e.target.matches(".btn-edit")){
         const row = e.target.closest("tr")
         document.getElementById("input_id").value = row.dataset.id;
-        document.getElementById("input_name").value = row.querySelector(".name").textContent.trim();
+        const nameCell = row.querySelector(".name");
+        document.getElementById("input_name").value = nameCell.dataset.name;
+        document.getElementById("input_surname").value = nameCell.dataset.surname;
         document.getElementById("input_email").value = row.querySelector(".email").textContent.trim();
         document.getElementById("input_sex").value = row.querySelector(".sex").textContent.trim();
         document.getElementById("input_department").value = row.dataset.departmentId;
@@ -171,8 +173,20 @@ document.addEventListener("click", function (e){
 
 document.querySelectorAll('.sidebar-link').forEach(link => {
   link.addEventListener('click', function (e) {
-    e.preventDefault(); 
-    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-    this.classList.add('active');
+    if (!this.classList.contains("logout_btn")) {
+      e.preventDefault(); 
+      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+    }
   });
 });
+
+function generate_pass(trgt) {
+    const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+    let pass = "";
+    for (let i = 1; i <= 8; i++) {
+        pass += chars[Math.floor(Math.random() * chars.length)];
+    }
+    document.getElementById(trgt).value = pass
+}
+

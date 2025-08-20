@@ -27,12 +27,19 @@
                     <input type="text" name="emp_name" id="input_name">
                 </div>
                 <div>
+                    <label for="input_surname">Surname</label>
+                    <input type="text" name="emp_surname" id="input_surname">
+                </div>
+                <div>
                     <label for="input_email">Email</label>
                     <input type="email" name="emp_email" id="input_email">
                 </div>
                 <div>
                     <label for="input_sex">Sex</label>
-                    <input type="text" name="emp_sex" id="input_sex">
+                     <select name="emp_sex" id="input_sex" class="input_emp_sex" required>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
                 </div>
                 <div class="d-flex justify-content-between">
                     <div>
@@ -52,6 +59,13 @@
                         </select>
                     </div>
                 </div>
+                <div>
+                    <label for="emp_pass">New password</label>
+                    <div class="d-flex flex-row gap-2">
+                        <input type="text" name="updt_emp_pass" id="emp_pass" class="input_pass_g create_pass" autocomplete="new-password" readonly>
+                        <button onclick="generate_pass('emp_pass')"  type="button" id="gen_updt" class="btn pass_btn"><i class="bi bi-lock-fill"></i></button>
+                    </div>
+                </div>
                 <button type="submit">Update</button>   
            </div>
         </form>
@@ -65,12 +79,19 @@
                     <input type="text" name="new_emp_name" id="input_emp_name" required>
                 </div>
                 <div>
+                    <label for="input_emp_surname">Surname</label>
+                    <input type="text" name="new_emp_surname" id="input_emp_surname" required>
+                </div>
+                <div>
                     <label for="input_emp_email">Email</label>
                     <input type="email" name="new_emp_email" id="input_emp_email" required>
                 </div>
                 <div>
                     <label for="input_emp_sex">Sex</label>
-                    <input type="text" name="new_emp_sex" id="input_emp_sex" required>
+                    <select name="new_emp_sex" id="input_emp_sex" class="input_emp_sex" required>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
                 </div>
                 <div class="d-flex justify-content-between">
                     <div>
@@ -92,11 +113,10 @@
                 </div>
                 <div>
                     <label for="input_emp_pass">Password</label>
-                    <input type="password" name="emp_pass" id="input_emp_pass" autocomplete="new-password" required>
-                </div>
-                <div>
-                    <label for="input_confirm_pass">Confirm password</label>
-                    <input type="password" name="confirm_emp_pass" id="input_confirm_pass" autocomplete="new-password" required>
+                    <div class="d-flex flex-row gap-2">
+                        <input type="text" name="emp_pass" id="input_emp_pass" class="input_pass_g" autocomplete="new-password"  readonly required>
+                        <button onclick="generate_pass('input_emp_pass')" type="button" id="gen_creat" class="btn pass_btn"><i class="bi bi-lock-fill"></i></button>
+                    </div>
                 </div>
                 <button type="submit">Create</button>
             </div>

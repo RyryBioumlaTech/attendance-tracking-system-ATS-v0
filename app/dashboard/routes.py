@@ -62,14 +62,15 @@ def load_datas():
         elif not total_check:
             return "<div class='alert alert-info mt-3' style='width:400px;'><p>Aucune données disponible pour cette periode</p></div>"
         
-        for employee in employees:
-            for date in dates:
+        for date in dates:   # boucle d'abord sur les dates
+            for employee in employees:  # puis sur les employés
                 checkpoints_in = Checkpoints.query.filter(
                     Checkpoints.employee_id == employee.id,
                     Checkpoints.moment >= datetime.combine(date, datetime.min.time()),
                     Checkpoints.moment <= datetime.combine(date, datetime.max.time()),
                     Checkpoints.type_id == 1
                 ).order_by(Checkpoints.moment).first()
+
                 checkpoints_out = Checkpoints.query.filter(
                     Checkpoints.employee_id == employee.id,
                     Checkpoints.moment >= datetime.combine(date, datetime.min.time()),
@@ -81,25 +82,23 @@ def load_datas():
                     entry = checkpoints_in.moment.time()
                     out = checkpoints_out.moment.time()
                     work_time = datetime.combine(date, out) - datetime.combine(date, entry)
-                    if entry > on_time:
-                        status = "late"
-                    else:
-                        status = "on time"
+                    status = "late" if entry > on_time else "on time"
                 elif checkpoints_in and not checkpoints_out:
                     entry = checkpoints_in.moment.time()
                     out = "-:-"
                     work_time = None
                     status = "incomplete"
                 elif checkpoints_out and not checkpoints_in:
-                    out = checkpoints_out.moment.time()
                     entry = "-:-"
+                    out = checkpoints_out.moment.time()
                     work_time = None
                     status = "incomplete"
                 else:
                     entry = "-:-"
                     out = "-:-"
                     work_time = None
-                    status = "absent"
+                    status = "unmarked"
+
                 new_report_rows.append({
                     'name': employee.name,
                     'date': date,
@@ -119,7 +118,7 @@ def load_datas():
         periode = df[(df["date"] >= start_date) & (df["date"] <= end_date)]
 
         nb_days = len(periode)
-        nb_absent = (periode["status"] == "absent").sum()
+        nb_absent = (periode["status"] == "unmarked").sum()
         absence_percentage = (nb_absent / nb_days) * 100
 
         valid_entry = periode.dropna(subset=["entry"])
@@ -136,7 +135,7 @@ def load_datas():
         work_time_per_employee = periode.groupby("name")["work_time"].sum()
 
         resume = df.groupby("name").agg(
-            nb_abs = ("status", lambda x: (x=="absent").sum()),
+            nb_abs = ("status", lambda x: (x=="unmarked").sum()),
             work_day = ("work_time", lambda x: x.notna().sum()),
             total_work_time = ("work_time", lambda x: round(sum([wt.total_seconds() for wt in x if pd.notnull(wt)]) / 3600))
         )
@@ -191,6 +190,7 @@ def load_managed_data():
         list_employee.append({
             'id': emp.id,
             'name': emp.name,
+            'surname': emp.surname,
             'email': emp.email,
             'sex': emp.sex,
             'department': department.name if department else 'Unknow',
@@ -221,9 +221,14 @@ def update_infos_emp():
     emp_pos = request.form.get("emp_position")
     emp_dep = request.form.get("emp_department")
     emp_name = request.form.get("emp_name")
+    emp_surname = request.form.get("emp_surname")
+    emp_new_pass = request.form.get("updt_emp_pass")
 
     if not emp_name or emp_name.isdigit() or emp_name.strip() == "":
         return "<div class='alert alert-warning mt-3' style='width:400px;'><p>Enter a valid name !</p></div>", 400
+
+    if not emp_surname or emp_surname.isdigit() or emp_surname.strip() == "":
+        return "<div class='alert alert-warning mt-3' style='width:400px;'><p>Enter a valid surname !</p></div>", 400
 
     emp_email = request.form.get("emp_email")
 
@@ -232,21 +237,20 @@ def update_infos_emp():
 
     emp_sex = request.form.get("emp_sex")
 
-    if not emp_sex or emp_sex.isdigit() or emp_sex.strip() == "" or (emp_sex.upper() != "F" and emp_sex.upper() != "M"):
-        return "<div class='alert alert-warning mt-3' style='width:400px;'><p>Enter F or M in the Sex field !</p></div>", 400
-
     employee = Employee.query.filter(Employee.id==emp_id).first()
     emp_position = Position.query.filter(Position.name==emp_pos).first()
     emp_department = Department.query.filter(Department.id==emp_dep).first()
     
     if employee is not None :
         employee.name = emp_name
+        employee.surname = emp_surname
         employee.email = emp_email
         employee.sex = emp_sex
         if emp_department and emp_position is not None :
             employee.department_id = emp_department.id 
             employee.position_id = emp_position.id
-
+        if (emp_new_pass and emp_new_pass.strip() != ""):
+            employee.create_pass(emp_new_pass)
     db.session.commit()
 
     if emp_department is not None :
@@ -261,6 +265,7 @@ def update_infos_emp():
             list_employee.append({
                 'id': emp.id,
                 'name': emp.name,
+                'surname': emp.surname,
                 'email': emp.email,
                 'sex': emp.sex,
                 'department': department.name if department else 'Unknow',
@@ -280,9 +285,9 @@ def create_emp_account():
     new_emp_pos = request.form.get('new_emp_position')
     new_emp_dep = request.form.get('new_emp_department')
     emp_pass = request.form.get('emp_pass')
-    confirm_emp_pass = request.form.get('confirm_emp_pass')
+    new_emp_surname = request.form.get('new_emp_surname')
 
-    if not new_emp_name or not new_emp_email or not new_emp_sex or not new_emp_pos or not new_emp_dep or not emp_pass or not confirm_emp_pass:
+    if not new_emp_name or not new_emp_email or not new_emp_sex or not new_emp_pos or not new_emp_dep or not emp_pass:
         return '<div class="alert alert-warning"><p> Please fill all fields !</p></div>'
     
     if new_emp_name.isdigit() or new_emp_name.strip() == "":
@@ -291,14 +296,9 @@ def create_emp_account():
     if new_emp_email.isdigit() or new_emp_email.strip() == "":
         return '<div class="alert alert-warning"><p>Enter a valid email !</p></div>'
     
-    if new_emp_sex.isdigit() or new_emp_sex.strip() == "" or (new_emp_sex.upper() != "F" and new_emp_sex.upper() != "M"):
-        return '<div class="alert alert-warning"><p>Enter F or M in the Sex field !</p></div>'
 
     if len(emp_pass)<6 or emp_pass.strip() == "":
         return '<div class="alert alert-warning"><p> Enter a 6 characters password at least </p></div>'
-    
-    if emp_pass != confirm_emp_pass:
-        return '<div class="alert alert-warning"><p> confirm password does not match </p></div>'
     
     employee_by_email = Employee.query.filter(Employee.email == new_emp_email).all()
     employee_by_name = Employee.query.filter(Employee.name == new_emp_name).all()
@@ -308,6 +308,7 @@ def create_emp_account():
     
     emp = Employee(
         name = new_emp_name, #type: ignore
+        surname = new_emp_surname, #type: ignore
         email = new_emp_email,#type: ignore
         password = "", #type: ignore
         sex = new_emp_sex, #type: ignore
@@ -318,7 +319,7 @@ def create_emp_account():
     db.session.add(emp)
     db.session.commit()
 
-    return '<div class="alert alert-success"><p> Employee registration success </p></div>"'
+    return '<div class="alert alert-success"><p> Employee registration success </p></div>'
 
 #export datas
 @dash_bp.route('/export_datas', methods=['POST'])
@@ -351,6 +352,11 @@ def export():
         status = None
         new_report_rows = []
         on_time = time(8, 30)
+
+        total_check =  Checkpoints.query.filter(
+                    Checkpoints.moment >= start_date,
+                    Checkpoints.moment <= end_date
+                ).order_by(Checkpoints.moment).first()
         
         checkpoints_in = []
         checkpoints_out = []
@@ -391,10 +397,12 @@ def export():
                     entry = "-:-"
                     out = "-:-"
                     work_time = None
-                    status = "absent"
+                    status = "unmarked"
                 new_report_rows.append({
                     'name': employee.name,
+                    'surname': employee.surname,
                     'sex':employee.sex,
+                    'department': department.name if department else "None",
                     'position': employee.position.name,
                     'date': date,
                     'entry': entry,
@@ -403,18 +411,20 @@ def export():
                     'status': status
                 })
 
-        if not checkpoints_in and not checkpoints_out:
+        if not total_check:
             return "<p>Aucune données à exporter</p>"
 
         cleaned_rows = [
             row for row in new_report_rows
-            if row["status"] != "absent" and (row["entry"] != "-:-" or row["exit"] != "-:-")
+            if row["status"] != "unmarked" and (row["entry"] != "-:-" or row["exit"] != "-:-")
         ]
 
+        cleaned_rows2 = cleaned_rows
         cleaned_rows.sort(key=lambda r: (r["name"], r["date"]))
 
         #data analysis
         df = pd.DataFrame(new_report_rows)
+        df2 = pd.DataFrame(cleaned_rows2)
 
         df["entry"] = pd.to_datetime(df["entry"], format="%H:%M:%S", errors="coerce").dt.time
         df["exit"] = pd.to_datetime(df["exit"], format="%H:%M:%S", errors="coerce").dt.time
@@ -423,7 +433,7 @@ def export():
         periode = df[(df["date"] >= start_date) & (df["date"] <= end_date)]
 
         nb_days = len(periode)
-        nb_absent = (periode["status"] == "absent").sum()
+        nb_absent = (periode["status"] == "unmarked").sum()
         absence_percentage = (nb_absent / nb_days) * 100
 
         valid_entry = periode.dropna(subset=["entry"])
@@ -438,9 +448,9 @@ def export():
         regular_exit = df_exit_data.dt.time.mode().iloc[0] if not df_exit_data.empty else None
 
         resume = df.groupby("name").agg(
-            nb_abs = ("status", lambda x: (x=="absent").sum()),
+            nb_abs = ("status", lambda x: (x=="unmarked").sum()),
             work_day = ("work_time", lambda x: x.notna().sum()),
-            total_work_time = ("work_time", lambda x: round(sum([wt.total_seconds() for wt in x if pd.notnull(wt)]) / 3600))
+            total_work_time = ("work_time", lambda x: round(sum([wt.total_seconds() for wt in x if pd.notnull(wt)]) / 3600, 2))
         )
 
         resume["mean_work_time"] = resume.apply(
@@ -468,14 +478,18 @@ def export():
             "frequent_departure": regular_exit.strftime("%H:%M:%S") if regular_exit else "N/A"
         }
 
-    df_export = df.copy()
+    df_export = df2.copy()
     df_export["work_time"] = df_export["work_time"].apply(
-        lambda td: f"{td.seconds//3600:02d}:{(td.seconds%3600)//60:02d}" if pd.notnull(td) else ""
+        lambda td: round(td.total_seconds() / 3600, 2) if pd.notnull(td) else ""
     )
-
+    print(df_export)
+    df_export["date"] = pd.to_datetime(df_export["date"], errors="coerce")
+    df_export["date"] = df_export["date"].dt.strftime("%d-%m-%Y")
+    df_export = df_export.drop(columns=["status"])
+    
     if export_type == 'csv':
         buffer = io.StringIO()
-        df_export.to_csv(buffer, index=False)
+        df_export.to_csv(buffer, index=False) 
         buffer.seek(0)
         return send_file(
             io.BytesIO(buffer.getvalue().encode()),
@@ -485,7 +499,7 @@ def export():
         )
     elif export_type == 'excel':
         buffer = io.BytesIO()
-        df_export.to_excel(buffer, index=False, engine='openpyxl')
+        df_export.to_excel(buffer, index=False, engine='openpyxl') 
         buffer.seek(0)
         return send_file(
             buffer,

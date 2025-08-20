@@ -18,7 +18,7 @@
             <tbody>
                {% for emp in employee_list %}
                     <tr data-id="{{ emp.id }}" data-department-id="{{ emp.department_id }}" data-position-id="{{ emp.position_id }}">
-                        <td class="name td1">{{ emp.name }}</td>
+                        <td class="name td1" data-name="{{ emp.name }}" data-surname="{{ emp.surname }}">{{ emp.name }} {{ emp.surname }}</td>
                         <td class="email">{{ emp.email }}</td>
                         <td class="sex">{{ emp.sex }}</td>
                         <td class="department">{{ emp.department }}</td>

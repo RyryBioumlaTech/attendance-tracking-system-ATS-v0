@@ -92,7 +92,7 @@ a.sidebar-link:hover {
     transition: 0.3s ease-in-out;
 }
 
-a.sidebar-link.active{
+.active{
     background-color: rgba(255, 255, 255, 0);
     border-left: 3px solid #ff512f;
 }
@@ -299,6 +299,19 @@ label{
     width: 110px;
 }
 
+.input_emp_sex{
+    display: block;
+    height: 40px;
+    width: 100% !important; 
+    background-color: rgba(232, 232, 232, 0.315);
+    border-radius: 3px;
+    padding: 0 10px;
+    margin-top: 6px;
+    border: 1px solid #080710;
+    font-size: 14px;
+    font-weight: 300;
+}
+
 #exp-btn, .register-btn {
     background-color: var(--blue);
     color: white;
@@ -427,4 +440,17 @@ thead {
     margin-right: 70%;
     box-sizing: border-box;
     overflow: hidden;
+}
+
+.pass_btn{
+    width: 15% !important;
+    background-color: rgba(232, 232, 232, 0.315) !important;
+    color: black !important;
+    margin-top: 6px !important;
+    border: 1px solid #080710;
+    height: 40px !important;
+}
+
+.input_pass_g{
+    width: 85% !important;
 }
