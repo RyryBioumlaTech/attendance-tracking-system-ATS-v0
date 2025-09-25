@@ -60,10 +60,11 @@ body {
 }
 
 .dash_title {
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     color: white;
     margin-left: 30px;
     margin-top: 10px;
-    font-weight: 600px;
+    font-weight: 800px;
 }
 
 .sidebar-nav {
