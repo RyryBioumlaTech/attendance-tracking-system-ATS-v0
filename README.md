@@ -14,3 +14,4 @@ with reports generation
 5. run flask run and connect with credentials admin@admin.com and password : adminpass
 # screenshots
 <img width="1354" height="679" alt="view_datas" src="https://github.com/user-attachments/assets/9172df50-2c2f-49a0-a6dd-6846c62a8d22" />
+<img width="1366" height="768" alt="qrScreen" src="https://github.com/user-attachments/assets/6f95a723-3b63-4e7d-a9ea-048b9101df92" />
