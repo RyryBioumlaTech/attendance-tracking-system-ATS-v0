@@ -19,7 +19,7 @@ def create_app():
 
     
     app.secret_key = 'bpsr15Dieu@' 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/ats_db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://userTest:@localhost/ats_db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)

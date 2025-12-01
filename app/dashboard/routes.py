@@ -99,7 +99,8 @@ def load_datas():
                     work_time = None
                     status = "unmarked"
 
-                new_report_rows.append({
+                if status != "unmarked":
+                    new_report_rows.append({
                     'name': employee.name,
                     'date': date,
                     'entry': entry,
@@ -206,7 +207,7 @@ def load_managed_data():
 @admin_required
 def laod_admin():
     admin = Admin.query.all()
-    return render_template('partials/admin-manager.html', admin_list=admin)
+    return render_template('partials/admin-manager.html', admin_list=admin, admin=current_user)
 
 
 @dash_bp.route('/update_emp', methods=['POST'])
