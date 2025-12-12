@@ -469,3 +469,7 @@ thead {
 .input_pass_g{
     width: 85% !important;
 }
+
+.email{
+    overflow-x: hidden;
+}

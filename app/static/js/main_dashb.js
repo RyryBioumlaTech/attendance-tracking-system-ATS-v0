@@ -195,3 +195,14 @@ function generate_pass(trgt) {
     document.getElementById(trgt).value = pass
 }
 
+document.addEventListener('DOMContentLoaded',()=>{
+    const delay = 5000;
+
+    setTimeout(()=>{
+        document.querySelectorAll(".flash_msg").forEach((msg)=>{
+            msg.style.transition = "opacity 0.5s";
+            msg.style.opacity = "0";
+            setTimeout(()=>msg.remove(), 500);
+        })
+    }, delay)
+})

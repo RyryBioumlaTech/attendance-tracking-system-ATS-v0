@@ -1,4 +1,4 @@
-from flask import render_template, request, send_file, jsonify
+from flask import render_template, request, send_file, jsonify, redirect, flash, url_for
 from app.dashboard import dash_bp
 from app.models import Department, db, Employee, Checkpoints, Position, Admin
 from flask_login import login_required, current_user
@@ -32,7 +32,7 @@ def load_datas():
     end_date = request.form.get('end_date')
 
     if not start_date or not end_date:
-        return "<div class='alert alert-warning mt-3' style='width:400px;'><p>Start date and end date are required.</p></div>"
+        return "<div class='alert alert-warning mt-3 flash_msg' style='width:400px;'><p>Start date and end date are required.</p></div>"
     else :
         
         starting = datetime.strptime(start_date, "%Y-%m-%d").date()
@@ -58,9 +58,9 @@ def load_datas():
                 ).order_by(Checkpoints.moment).first()
         
         if (starting > ending):
-            return "<div class='alert alert-warning mt-3' style='width:400px;'><p>Selectionner une periode valide!</p></div>"
+            return "<div class='alert alert-warning mt-3 flash_msg' style='width:400px;'><p>Select a valid perid!</p></div>"
         elif not total_check:
-            return "<div class='alert alert-info mt-3' style='width:400px;'><p>Aucune données disponible pour cette periode</p></div>"
+            return "<div class='alert alert-info mt-3 flash_msg' style='width:400px;'><p>No data found for this period!</p></div>"
         
         for date in dates:   # boucle d'abord sur les dates
             for employee in employees:  # puis sur les employés
@@ -119,7 +119,7 @@ def load_datas():
         periode = df[(df["date"] >= start_date) & (df["date"] <= end_date)]
 
         nb_days = len(periode)
-        nb_absent = (periode["status"] == "unmarked").sum()
+        nb_absent = (periode["status"] == "incomplete").sum()
         absence_percentage = (nb_absent / nb_days) * 100
 
         valid_entry = periode.dropna(subset=["entry"])
@@ -136,7 +136,7 @@ def load_datas():
         work_time_per_employee = periode.groupby("name")["work_time"].sum()
 
         resume = df.groupby("name").agg(
-            nb_abs = ("status", lambda x: (x=="unmarked").sum()),
+            nb_abs = ("status", lambda x: (x=="incomplete").sum()),
             work_day = ("work_time", lambda x: x.notna().sum()),
             total_work_time = ("work_time", lambda x: round(sum([wt.total_seconds() for wt in x if pd.notnull(wt)]) / 3600))
         )
@@ -218,7 +218,7 @@ def update_infos_emp():
     if emp_id and emp_id.strip():
         emp_id = int(emp_id)
     else:
-        return "<div class='alert alert-warning mt-3' style='width:400px;'><p>Employee ID is required.</p></div>", 400
+        return "<div class='alert alert-warning mt-3 flash_msg' style='width:400px;'><p>Employee ID is required.</p></div>", 400
     emp_pos = request.form.get("emp_position")
     emp_dep = request.form.get("emp_department")
     emp_name = request.form.get("emp_name")
@@ -226,15 +226,15 @@ def update_infos_emp():
     emp_new_pass = request.form.get("updt_emp_pass")
 
     if not emp_name or emp_name.isdigit() or emp_name.strip() == "":
-        return "<div class='alert alert-warning mt-3' style='width:400px;'><p>Enter a valid name !</p></div>", 400
+        return "<div class='alert alert-warning mt-3 flash_msg' style='width:400px;'><p>Enter a valid name !</p></div>", 400
 
     if not emp_surname or emp_surname.isdigit() or emp_surname.strip() == "":
-        return "<div class='alert alert-warning mt-3' style='width:400px;'><p>Enter a valid surname !</p></div>", 400
+        return "<div class='alert alert-warning mt-3 flash_msg' style='width:400px;'><p>Enter a valid surname !</p></div>", 400
 
     emp_email = request.form.get("emp_email")
 
     if not emp_email or emp_email.isdigit() or emp_email.strip() == "":
-        return "<div class='alert alert-warning mt-3' style='width:400px;'><p>Enter a valid email !</p></div>", 400
+        return "<div class='alert alert-warning mt-3 flash_msg' style='width:400px;'><p>Enter a valid email !</p></div>", 400
 
     emp_sex = request.form.get("emp_sex")
 
@@ -289,23 +289,23 @@ def create_emp_account():
     new_emp_surname = request.form.get('new_emp_surname')
 
     if not new_emp_name or not new_emp_email or not new_emp_sex or not new_emp_pos or not new_emp_dep or not emp_pass:
-        return '<div class="alert alert-warning"><p> Please fill all fields !</p></div>'
+        return '<div class="alert alert-warning flash_msg"><p> Please fill all fields !</p></div>'
     
     if new_emp_name.isdigit() or new_emp_name.strip() == "":
-        return '<div class="alert alert-warning"><p>Enter a valid name !</p></div>'
+        return '<div class="alert alert-warning flash_msg"><p>Enter a valid name !</p></div>'
     
     if new_emp_email.isdigit() or new_emp_email.strip() == "":
-        return '<div class="alert alert-warning"><p>Enter a valid email !</p></div>'
+        return '<div class="alert alert-warning flash_msg"><p>Enter a valid email !</p></div>'
     
 
     if len(emp_pass)<6 or emp_pass.strip() == "":
-        return '<div class="alert alert-warning"><p> Enter a 6 characters password at least </p></div>'
+        return '<div class="alert alert-warning flash_msg"><p> Enter a 6 characters password at least </p></div>'
     
     employee_by_email = Employee.query.filter(Employee.email == new_emp_email).all()
     employee_by_name = Employee.query.filter(Employee.name == new_emp_name).all()
 
     if employee_by_email or employee_by_name:
-        return '<div class="alert alert-warning"><p> This employee is already registered </p></div>'
+        return '<div class="alert alert-warning flash_msg"><p> This employee is already registered </p></div>'
     
     emp = Employee(
         name = new_emp_name, #type: ignore
@@ -320,20 +320,23 @@ def create_emp_account():
     db.session.add(emp)
     db.session.commit()
 
-    return '<div class="alert alert-success"><p> Employee registration success </p></div>'
+    return '<div class="alert alert-success flash_msg"><p> Employee registration success </p></div>'
 
 #export datas
 @dash_bp.route('/export_datas', methods=['POST'])
 @login_required
 @admin_required
 def export():
+    from app import socketio
+
     department_id = request.form.get('exp_dep_id')
     start_date = request.form.get('exp_start_date')
     end_date = request.form.get('exp_end_date')
     export_type = request.form.get('export_type')
 
     if not start_date or not end_date:
-        return "<p>Start date and end date are required.</p>"
+        flash("Select a start and an end date","info")
+        return redirect(url_for("dashboard.admin_dash"))
     else :
         
         starting = datetime.strptime(start_date, "%Y-%m-%d").date()
@@ -413,7 +416,8 @@ def export():
                 })
 
         if not total_check:
-            return "<p>Aucune données à exporter</p>"
+            flash("No data found for export!","warning")
+            return redirect(url_for("dashboard.admin_dash"))
 
         cleaned_rows = [
             row for row in new_report_rows
@@ -483,9 +487,9 @@ def export():
     df_export["work_time"] = df_export["work_time"].apply(
         lambda td: round(td.total_seconds() / 3600, 2) if pd.notnull(td) else ""
     )
-    print(df_export)
-    df_export["date"] = pd.to_datetime(df_export["date"], errors="coerce")
-    df_export["date"] = df_export["date"].dt.strftime("%d-%m-%Y")
+    
+    df_export["date"] = pd.to_datetime(df_export["date"], errors="coerce").dt.strftime("%Y-%m-%d")
+
     df_export = df_export.drop(columns=["status"])
     
     if export_type == 'csv':
