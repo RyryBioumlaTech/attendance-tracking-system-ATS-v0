@@ -1,5 +1,6 @@
 from flask import render_template, jsonify, request
 from app.qr_code import qr_code_bp
+from app.dashboard import dash_bp
 from app.signature import generate_signature, compare_signature
 from flask_login import login_required, current_user
 from datetime import datetime, timedelta, date
@@ -8,6 +9,8 @@ from io import BytesIO
 import base64, secrets
 import qrcode
 import json
+
+from app.utils import admin_required
 
 used_nonces = set()
 
@@ -78,7 +81,11 @@ def saveCheckpoints(moment_recieved, employee_id):
         db.session.add(new_checkpoint)
         db.session.commit()
 
+
+
 @qr_code_bp.route('/qr_code')
+@login_required
+@admin_required
 def show():
     img_base64 = generate_qr_base64()
     return render_template('qr_code.html', qr_code=img_base64)

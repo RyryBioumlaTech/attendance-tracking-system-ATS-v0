@@ -2,6 +2,14 @@ from app import create_app, socketio
 
 app = create_app()
 
+# if __name__ == "__main__":
+#     # socketio.run(app,host='0.0.0.0', port=5000)
+#     app.run(host='0.0.0.0', port=5000, ssl_context='adhoc')
+
 if __name__ == "__main__":
-    # socketio.run(app,host='0.0.0.0', port=5000)
-    app.run(host='0.0.0.0', port=5000, ssl_context='adhoc')
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        ssl_context=("certs/cert.pem", "certs/key.pem"),
+        debug=True
+    )
