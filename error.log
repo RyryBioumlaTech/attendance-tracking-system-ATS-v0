@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/ryan/Dev/projects/attendanceTracking (v2)/attendanceTracking/run.py", line 1, in <module>
+    from app import create_app, socketio
+  File "/home/ryan/Dev/projects/attendanceTracking (v2)/attendanceTracking/app/__init__.py", line 9, in <module>
+    from app.dashboard import dash_bp
+  File "/home/ryan/Dev/projects/attendanceTracking (v2)/attendanceTracking/app/dashboard/__init__.py", line 5, in <module>
+    from app.dashboard import routes
+  File "/home/ryan/Dev/projects/attendanceTracking (v2)/attendanceTracking/app/dashboard/routes.py", line 7, in <module>
+    from weasyprint import HTML
+ModuleNotFoundError: No module named 'weasyprint'

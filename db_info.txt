@@ -1,0 +1,4 @@
+--- TABLES ---
+['alembic_version']
+
+--- ALEMBIC VERSION ---
