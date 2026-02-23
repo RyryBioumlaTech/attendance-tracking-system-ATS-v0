@@ -1,44 +1,45 @@
 :root {
-  --green: #1E7F4F;
-  --red: #CE1126;
-  --blue: #FF9F00;
-  --bg: #f5f5f5;
-  --overbg:#e4e4e4;
-  --bg-login: rgba(255, 255, 255, 0.95); 
-  --input-bg: rgba(240, 240, 240, 1); 
-  --text-color: #111; 
-  --shadow-color: rgba(0, 0, 0, 0.2);
-  --overlay-bg-f: rgb(0,0,0);
-  --overlay-bg-s: rgba(0,0,0,0.4);
+    --green: #1E7F4F;
+    --red: #CE1126;
+    --blue: #FF9F00;
+    --bg: #f5f5f5;
+    --overbg: #e4e4e4;
+    --bg-login: rgba(255, 255, 255, 0.95);
+    --input-bg: rgba(240, 240, 240, 1);
+    --text-color: #111;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --overlay-bg-f: rgb(0, 0, 0);
+    --overlay-bg-s: rgba(0, 0, 0, 0.4);
 }
 
-*{
-	box-sizing: border-box;
+* {
+    box-sizing: border-box;
     text-decoration: none;
     list-style: none;
 }
 
 body::-webkit-scrollbar {
-    display: none;          /* Chrome, Edge, Safari */
+    display: none;
+    /* Chrome, Edge, Safari */
 }
 
 body {
-	font-family: System UI, Segoe UI, Roboto, Helvetica Neue, Arial;
-	line-height: 1.5;
-	min-height: 100vh;
+    font-family: System UI, Segoe UI, Roboto, Helvetica Neue, Arial;
+    line-height: 1.5;
+    min-height: 100vh;
     height: 100vh;
     min-width: 100vw;
     background-color: var(--bg);
-	display: flex;
-	align-items: center;
-	justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow-x: hidden;
     flex-direction: row;
 }
 
 #main-content {
     min-height: 100vh;
-    transition: all 0.35s ease-in-out; 
+    transition: all 0.35s ease-in-out;
     background-color: var(--bg);
     flex-grow: 1;
     padding-bottom: 10px;
@@ -54,28 +55,30 @@ body {
     transition: all .25s ease-in-out;
     display: flex;
     flex-direction: column;
-    background-color: white;
+    background-color: var(--green);
     position: fixed;
     top: 0;
     left: 0;
     border-right: 1px solid #ccc;
 }
 
-.top_sidebar{
+.top_sidebar {
     display: flex;
     flex-direction: row;
     gap: 10px;
     padding-left: 1.98rem;
+    width: 100%;
+    justify-items: center;
 }
 
-.top_sidebar img{
+.top_sidebar img {
     margin-top: 10px;
     width: 50px;
     height: 50px;
 }
 
 .dash_title {
-    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     color: var(--green);
     margin-top: 15px;
     font-weight: 800px;
@@ -105,17 +108,17 @@ a {
 }
 
 a.sidebar-link:hover {
-    background-color: var(--overbg);
+    background-color: #25ba70;
     transition: 0.3s ease-in-out;
 }
 
-a.sidebar-link.active{
-    background-color: rgba(255, 255, 255, 0);
+a.sidebar-link.active {
+    background-color: #25ba70;
     border-left: 3px solid #ff512f;
 }
 
 .sidebar-item i {
-    color: var(--green);
+    color: white;
 }
 
 
@@ -123,7 +126,12 @@ a.sidebar-link.active{
     margin-right: .75rem;
 }
 
-.manage_sec, .report-sec {
+.sidebar-link span {
+    color: white;
+}
+
+.manage_sec,
+.report-sec {
     width: 100%;
     padding-top: 10px;
     position: absolute;
@@ -142,7 +150,7 @@ a.sidebar-link.active{
 }
 
 .table_sec {
-    width: 100%; 
+    width: 100%;
     margin-left: -25px;
     padding-left: 25px;
     padding-right: 70px;
@@ -150,7 +158,7 @@ a.sidebar-link.active{
 }
 
 .report_form_sec {
-    width: 100%; 
+    width: 100%;
     margin-left: -25px;
     padding-left: 25px;
     display: flex;
@@ -160,7 +168,7 @@ a.sidebar-link.active{
 }
 
 .manage_form_sec {
-    width: 100%; 
+    width: 100%;
     margin-left: -25px;
     padding-left: 25px;
     display: flex;
@@ -171,38 +179,38 @@ a.sidebar-link.active{
 
 #register_form {
     position: fixed;
-    z-index: 1; 
+    z-index: 1;
     left: 0;
     top: 0;
-    width: 100%; 
+    width: 100%;
     height: 100%;
-    overflow: auto; 
-    background-color: var(--overlay-bg-f); 
-    background-color: var(--overlay-bg-s); 
+    overflow: auto;
+    background-color: var(--overlay-bg-f);
+    background-color: var(--overlay-bg-s);
 }
 
 #register_form2 {
     position: fixed;
-    z-index: 1; 
+    z-index: 1;
     left: 0;
     top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: auto; 
-    background-color: var(--overlay-bg-f); 
-    background-color: var(--overlay-bg-s); 
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: var(--overlay-bg-f);
+    background-color: var(--overlay-bg-s);
 }
 
 #update_form {
     position: fixed;
-    z-index: 1; 
+    z-index: 1;
     left: 0;
     top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: auto; 
-    background-color: var(--overlay-bg-f); 
-    background-color: var(--overlay-bg-s); 
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: var(--overlay-bg-f);
+    background-color: var(--overlay-bg-s);
 }
 
 .form_content {
@@ -210,25 +218,25 @@ a.sidebar-link.active{
     width: 400px;
     background-color: var(--bg-login);
     position: absolute;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     top: 50%;
     left: 50%;
     border-radius: 10px;
-    border: 2px solid rgba(255,255,255,0.1);
-    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
     padding: 15px 25px;
     box-sizing: border-box;
 }
 
-.form_content *{
-    font-family: 'Poppins',sans-serif;
+.form_content * {
+    font-family: 'Poppins', sans-serif;
     color: #6b6b6b;
     letter-spacing: 0.5px;
     outline: none;
     border: none;
 }
 
-.form_content button{
+.form_content button {
     margin-top: 50px;
     width: 100%;
     background-color: var(--green);
@@ -240,7 +248,7 @@ a.sidebar-link.active{
     cursor: pointer;
 }
 
-.form_content input{
+.form_content input {
     display: block;
     height: 40px;
     width: 100%;
@@ -263,7 +271,7 @@ a.sidebar-link.active{
     background-color: rgba(232, 232, 232, 0.315);
 }
 
-label{
+label {
     display: block;
     margin-top: 10px;
     font-size: 16px;
@@ -271,35 +279,35 @@ label{
 }
 
 .manage_form {
-  background-color: var(--bg-login);
-  margin: 15% auto; 
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%; 
+    background-color: var(--bg-login);
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
 }
 
-/* From Uiverse.io by kamehame-ha */ 
+/* From Uiverse.io by kamehame-ha */
 .button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px 10px;
-  background-color: var(--green);
-  outline: 3px var(--green) solid;
-  outline-offset: -3px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  transition: 400ms;
-  color: white;
-  font-weight: 400;
-  
-  transition: 400ms;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: var(--green);
+    outline: 3px var(--green) solid;
+    outline-offset: -3px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: 400ms;
+    color: white;
+    font-weight: 400;
+
+    transition: 400ms;
 }
 
 .button:hover {
-  background-color: transparent;
-  color: var(--green);
+    background-color: transparent;
+    color: var(--green);
 }
 
 .general-input {
@@ -317,10 +325,10 @@ label{
     width: 110px;
 }
 
-.input_emp_sex{
+.input_emp_sex {
     display: block;
     height: 40px;
-    width: 100% !important; 
+    width: 100% !important;
     background-color: rgba(232, 232, 232, 0.315);
     border-radius: 3px;
     padding: 0 10px;
@@ -330,25 +338,27 @@ label{
     font-weight: 300;
 }
 
-#exp-btn, .register-btn {
+#exp-btn,
+.register-btn {
     background-color: var(--blue);
     color: white;
     outline: 3px var(--blue) solid;
 }
 
-#exp-btn:hover, .register-btn:hover {
+#exp-btn:hover,
+.register-btn:hover {
     background-color: transparent;
     color: var(--blue) !important;
 }
 
-th{
+th {
     width: 16.6666666667%;
     background-color: rgb(219, 219, 219);
     padding: 10px 15px;
     color: #888;
 }
 
-td{
+td {
     width: 16.6666666667%;
     background-color: rgb(255, 255, 255);
     padding: 10px 15px;
@@ -413,12 +423,13 @@ thead {
 }
 
 .table-body {
-    max-height: 500px; 
+    max-height: 500px;
     overflow-y: auto;
     width: 90%;
     margin-right: 80px;
-    scrollbar-width: none;  /* Firefox */
-    -ms-overflow-style: none; 
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
 }
 
 .table-body table {
@@ -426,7 +437,8 @@ thead {
 }
 
 .table-body::-webkit-scrollbar {
-    display: none;          /* Chrome, Edge, Safari */
+    display: none;
+    /* Chrome, Edge, Safari */
 }
 
 .toast-container {
@@ -443,7 +455,7 @@ thead {
     padding: 15px 30px;
     margin-top: 10px;
     border-radius: 4px;
-    box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
     opacity: 0;
     transform: translateY(-20px);
     transition: opacity 0.3s, transform 0.3s;
@@ -454,13 +466,13 @@ thead {
     transform: translateY(0);
 }
 
-.admin-manager{
+.admin-manager {
     margin-right: 70%;
     box-sizing: border-box;
     overflow: hidden;
 }
 
-.pass_btn{
+.pass_btn {
     width: 15% !important;
     background-color: rgba(232, 232, 232, 0.315) !important;
     color: black !important;
@@ -469,15 +481,15 @@ thead {
     height: 40px !important;
 }
 
-.input_pass_g{
+.input_pass_g {
     width: 85% !important;
 }
 
-.email{
+.email {
     overflow-x: hidden;
 }
 
-.qrBtn{
+.qrBtn {
     display: inline-block;
     border: 0.5px solid lightgray;
     background-color: var(--bg);
@@ -489,18 +501,18 @@ thead {
     text-align: center;
 }
 
-.qrBtn a{
+.qrBtn a {
     color: var(--green);
     font-weight: 800;
 }
 
-.qrBtn i{
+.qrBtn i {
     margin-right: 8px;
     vertical-align: middle;
     font-size: 1rem;
     color: var(--green);
 }
 
-.qrBtn:hover{
+.qrBtn:hover {
     background-color: rgb(240, 240, 240);
 }

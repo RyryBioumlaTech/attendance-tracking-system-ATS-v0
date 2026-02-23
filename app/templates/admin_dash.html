@@ -1,51 +1,49 @@
 {% extends "base.html" %}
-{% block title %}ATS | admin-dashbord{% endblock %} 
-{% block styles %}    
-    <link rel="stylesheet" href="{{ url_for('static', filename='icons/bootstrap-icons.css') }}">
+{% block title %}ATS | admin-dashbord{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='icons/bootstrap-icons.css') }}">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/admindash.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style/admindash.css')}}">
 {% endblock %}
 
 {% block content %}
-    <div class="toast-container"></div>
-    <div class="wrapper">
-        <aside id="sidebar">
-            <div class="top_sidebar">
-                <img src="{{ url_for('static', filename='icons/qr-code.png')}}" alt="logo ATS">
-                <h2 class="dash_title">ATS</h2>
-            </div>
-            <hr style="border: none; height: 1px; background-color: #ccc">
-            <ul class="sidebar-nav" style="margin-top: -30px;">
+<div class="toast-container"></div>
+<div class="wrapper">
+    <aside id="sidebar">
+        <div class="top_sidebar">
+            <img src="{{ url_for('static', filename='icons/qr-code.png')}}" alt="logo ATS">
+        </div>
+        <hr style="border: none; height: 1px; background-color: #ccc">
+        <ul class="sidebar-nav" style="margin-top: -30px;">
+            <p style="margin-left: 30px; font-size: 12px; color: #ccc;">GENERAL</p>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link active" onclick="loadsec('reports')"><i
+                        class="bi bi-list-task"></i><span>Reports</span></a>
+            </li>
+            <p style="margin-left: 30px; margin-top: 30px; font-size: 12px; color: #ccc;">MANAGE</p>
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link" onclick="loadsec('manage')"><i class="bi bi-kanban"></i><span>
+                        Users</span></a>
+            </li>
+            {% if user.role == 'superAd' %}
+            <li class="sidebar-item">
+                <a href="#" class="sidebar-link" onclick="loadsec('admin-manager')"><i
+                        class="bi bi-person-fill-gear"></i><span>Admins</span></a>
+            </li>
+            {% endif %}
+        </ul>
+        <div class="sidebar-footer">
+            <a href="/logout" class="sidebar-link logout_btn">
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link active" onclick="loadsec('reports')"><i class="bi bi-list-task"></i><span>Reports</span></a>
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span>Logout</span>
                 </li>
-                <li class="sidebar-item">
-                    <a href="#" class="sidebar-link" onclick="loadsec('manage')"><i class="bi bi-kanban"></i><span>Manage</span></a>
-                </li>
-                {% if user.role == 'superAd' %}
-                    <li class="sidebar-item">
-                        <a href="#" class="sidebar-link" onclick="loadsec('admin-manager')"><i class="bi bi-person-fill-gear"></i><span>Admins</span></a>
-                    </li>
-                {% endif %}
-                <button class="qrBtn">
-                    <a href="/qr_code" target="_blank">
-                        <i class="bi bi-play-fill" aria-hidden="true"></i>
-                        Generate a Qr
-                    </a>
-                </button>
-            </ul>
-            <div class="sidebar-footer">
-                <a href="/logout" class="sidebar-link logout_btn">
-                    <li class="sidebar-item">
-                        <i class="bi bi-box-arrow-left"></i>
-                        <span>Logout</span>
-                    </li>
-                </a>
-            </div>
-        </aside>
-    </div>
-    <div id="main-content"></div>
+            </a>
+        </div>
+    </aside>
+</div>
+<div id="main-content"></div>
 {% endblock %}
 {% block scripts %}
-    <script src="{{ url_for('static', filename='js/main_dashb.js')}}"></script>
+<script src="{{ url_for('static', filename='js/main_dashb.js')}}"></script>
 {% endblock %}
