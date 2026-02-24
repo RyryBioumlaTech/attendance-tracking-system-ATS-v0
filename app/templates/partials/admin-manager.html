@@ -1,54 +1,60 @@
 <div class="px-4 pt-2 manage_sec">
-    <h2>ADMIN MANAGER</h2>
-    <div>
-        <div class="manage_form_sec">
-            <button id="show_form2" class="button">Register an admin</button>
-        </div>
+    <div class="report_title">
+        <span style="text-align: center;">ADMIN MANAGER</span>
+        <button id="show_form2" class="button"> + Create an admin</button>
+    </div>
 
+    <div>
         <div class="spinner-border text-success mt-3 global-spinner" role="status" style="display: none;">
             <span class="sr-only"></span>
         </div>
-        
+
         <div class="manager_admin_table">
             <div class="table_sec">
                 <table class="mdrn_table admin-manager">
                     <tr>
-                        <th class="th1">Login</th>
-                        <th>Role</th>
-                        <th class="th2">Actions</th>
+                        <th class="th1">ID</th>
+                        <th>LOGIN</th>
+                        <th>ROLE</th>
+                        <th class="th2">ACTIONS</th>
                     </tr>
                     {% for ad in admin_list %}
-                            <tr data-id="{{ ad.id }}">
-                                <td class="name td1">{{ ad.login }}</td>
-                                <td class="email">{{ ad.role }}</td>
-                                <td class="td2">
-                                    {% if admin.login != ad.login %}
-                                        <button class="btn-delete2 rounded-pill bg-danger" style="border: none; padding: 5px 10px; color: white;"><i class="bi bi-trash3-fill"></i> Delete </button>
-                                    {% endif %}
-                                </td>
-                            </tr>
+                    <tr data-id="{{ ad.id }}" style="color: #939191;">
+                        <td class="id td1">#{{ ad.id}}</td>
+                        <td class="name">{{ ad.login }}</td>
+                        <td class="email">{{ ad.role }}</td>
+                        <td class="td2">
+                            {% if admin.login != ad.login %}
+                            <button class="btn-delete2 rounded-pill bg-danger"
+                                style="border: none; padding: 5px 10px; color: white;"><i class="bi bi-trash3-fill"></i>
+                                Delete </button>
+                            {% endif %}
+                        </td>
+                    </tr>
                     {% endfor %}
                 </table>
             </div>
         </div>
-            
-        <form action="/create_admin" method="post" data-target=".message_status" id="register_form2" style="display: none;">
+
+        <form action="/create_admin" method="post" data-target=".message_status" id="register_form2"
+            style="display: none;">
 
             <div class="form_content">
                 <div class="message_status"></div>
-            <div>
-                <label for="input_ad_login">Login</label>
-                <input type="text" name="new_ad_login" id="input_ad_login">
-            </div>
-            <div>
-                <label for="input_ad_pass">Password</label>
-                <input type="password" name="new_ad_pass" id="input_ad_pass" autocomplete="new-password">
-            </div>
-            <div>
-                <label for="input_confirm_ad_pass">Confirm password</label>
-                <input type="password" name="confirm_ad_pass" id="input_confirm_ad_pass" autocomplete="new-password">
-            </div>
-            <button type="submit">Create</button>
+                <div>
+                    <label for="input_ad_login">Login</label>
+                    <input type="text" name="new_ad_login" id="input_ad_login">
+                </div>
+                <div>
+                    <label for="input_ad_pass">Password</label>
+                    <input type="password" name="new_ad_pass" id="input_ad_pass" autocomplete="new-password">
+                </div>
+                <div>
+                    <label for="input_confirm_ad_pass">Confirm password</label>
+                    <input type="password" name="confirm_ad_pass" id="input_confirm_ad_pass"
+                        autocomplete="new-password">
+                </div>
+                <button type="submit">Create</button>
             </div>
         </form>
     </div>

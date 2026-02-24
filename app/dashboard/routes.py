@@ -182,6 +182,9 @@ def managedata():
 @admin_required
 def load_managed_data():
     department_id = request.form.get('department_id')
+    print(department_id)
+    if department_id == "0":
+        return "<div class='alert alert-info mt-3 flash_msg' style='width:400px;'><p>Please select a department !</p></div>"
     employee = db.session.query(Employee).filter(Employee.department_id==department_id)
     list_employee = []
     for emp in employee:

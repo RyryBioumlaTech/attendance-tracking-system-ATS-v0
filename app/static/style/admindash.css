@@ -24,6 +24,7 @@ body::-webkit-scrollbar {
 }
 
 body {
+    box-sizing: border-box;
     font-family: System UI, Segoe UI, Roboto, Helvetica Neue, Arial;
     line-height: 1.5;
     min-height: 100vh;
@@ -85,7 +86,7 @@ body {
 }
 
 .sidebar-nav {
-    padding: 2rem 0;
+    padding: 2rem 0 0 0;
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
@@ -93,7 +94,7 @@ body {
 }
 
 a.sidebar-link {
-    padding: 0.625rem 1.625rem;
+    padding: 0.625rem 1.125rem;
     color: var(--green);
     display: flex;
     font-size: 1.2rem;
@@ -123,7 +124,7 @@ a.sidebar-link.active {
 
 
 .sidebar-link i {
-    margin-right: .75rem;
+    margin-right: .55rem;
 }
 
 .sidebar-link span {
@@ -322,7 +323,7 @@ label {
 }
 
 #dep_id {
-    width: 110px;
+    width: 170px;
 }
 
 .input_emp_sex {
@@ -515,4 +516,22 @@ thead {
 
 .qrBtn:hover {
     background-color: rgb(240, 240, 240);
+}
+
+.report_title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 215px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.filter-input {
+    border-color: #ccc;
+}
+
+#dep_select2 {
+    width: 170px;
 }

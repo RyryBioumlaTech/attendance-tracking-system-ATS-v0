@@ -1,15 +1,15 @@
-function loadsec(page){
+function loadsec(page) {
     fetch(`/load/${page}`)
-    .then(response => {
-        if(!response.ok) throw new Error("Erreur de chargement");
-        return response.text();
-    })
-    .then(html => {
-        document.getElementById('main-content').innerHTML=html;
-    })
-    .catch(error => {
-        document.getElementById('main-content').innerHTML='<div class="alert alert-warning mt-3" style="width:300px;"><p>Erreur de chargement des données</p></div>'
-    })
+        .then(response => {
+            if (!response.ok) throw new Error("Erreur de chargement");
+            return response.text();
+        })
+        .then(html => {
+            document.getElementById('main-content').innerHTML = html;
+        })
+        .catch(error => {
+            document.getElementById('main-content').innerHTML = '<div class="alert alert-warning mt-3" style="width:300px;"><p>Erreur de chargement des données</p></div>'
+        })
 }
 
 window.loadsec('reports')
@@ -33,8 +33,8 @@ function showToast(message, duration = 5000) {
 
 
 
-document.addEventListener('submit', function(e){
-    if(e.target.matches('form') && e.target.id !== 'export_pdf_form'){
+document.addEventListener('submit', function (e) {
+    if (e.target.matches('form') && e.target.id !== 'export_pdf_form') {
         e.preventDefault();
         const form = e.target;
         const targetSelector = form.dataset.target
@@ -44,61 +44,61 @@ document.addEventListener('submit', function(e){
             method: 'POST',
             body: new FormData(form)
         })
-        .then(response => {
-            if(!response.ok) throw new Error("Erreur de chargement");
-            return response.text();
-        })
-        .then(html => {
+            .then(response => {
+                if (!response.ok) throw new Error("Erreur de chargement");
+                return response.text();
+            })
+            .then(html => {
 
-            spinner.style.display = "none";
-            const target = document.querySelector(targetSelector) ;
-            if(target) target.innerHTML = html;
+                spinner.style.display = "none";
+                const target = document.querySelector(targetSelector);
+                if (target) target.innerHTML = html;
 
-            const depEl = document.getElementById("dep_id");
-            const startEl = document.getElementById("start");
-            const endEl = document.getElementById("end");
+                const depEl = document.getElementById("dep_id");
+                const startEl = document.getElementById("start");
+                const endEl = document.getElementById("end");
 
-            if(depEl && startEl && endEl){
-                document.getElementById("exp_dep_id").value = depEl.value;
-                document.getElementById("exp_start_date").value = startEl.value;
-                document.getElementById("exp_end_date").value = endEl.value;
-            }
+                if (depEl && startEl && endEl) {
+                    document.getElementById("exp_dep_id").value = depEl.value;
+                    document.getElementById("exp_start_date").value = startEl.value;
+                    document.getElementById("exp_end_date").value = endEl.value;
+                }
 
-            console.log(depEl + startEl + endEl)
+                console.log(depEl + startEl + endEl)
 
-            if(form.action.endsWith('/update_emp')) {
+                if (form.action.endsWith('/update_emp')) {
+                    form.reset();
+                    form.style.display = "none";
+                    document.getElementById("input_id").value = "";
+                    showToast("Update Successful!")
+                }
+
+                if (form.action.endsWith('/create_admin')) {
+                    form.reset();
+                    form.style.display = "none";
+                    showToast("admin created !");
+                    window.loadsec('admin-manager')
+                }
+
+
+            })
+            .catch(error => {
+                spinner.style.display = "none";
+                const target = document.querySelector(targetSelector);
                 form.reset();
                 form.style.display = "none";
-                document.getElementById("input_id").value = "";
-                showToast("Update Successful!")
-            }
-
-            if(form.action.endsWith('/create_admin')) {
-                form.reset();
-                form.style.display = "none";
-                showToast("admin created !");
-                window.loadsec('admin-manager')
-            }
-
-            
-        })
-        .catch(error => {
-            spinner.style.display = "none";
-            const target = document.querySelector(targetSelector);
-            form.reset();
-            form.style.display = "none";
-            if(target) target.innerHTML = '<div class="alert alert-danger mt-3" style="width:350px;"><p class="d-flex align-items-center">Erreur de chargement des données</p></div>';
-        });
+                if (target) target.innerHTML = '<div class="alert alert-danger mt-3" style="width:350px;"><p class="d-flex align-items-center">Erreur de chargement des données</p></div>';
+            });
     }
 });
 
-function show_form(elmnt){
+function show_form(elmnt) {
     const targeted_form = document.getElementById(elmnt);
     targeted_form.style.display = targeted_form.style.display === "none" ? "block" : "none";
 }
 
-document.addEventListener("click", function (e){
-    if(e.target.matches(".btn-edit")){
+document.addEventListener("click", function (e) {
+    if (e.target.matches(".btn-edit")) {
         const row = e.target.closest("tr")
         document.getElementById("input_id").value = row.dataset.id;
         const nameCell = row.querySelector(".name");
@@ -107,87 +107,87 @@ document.addEventListener("click", function (e){
         document.getElementById("input_email").value = row.querySelector(".email").textContent.trim();
         document.getElementById("input_sex").value = row.querySelector(".sex").textContent.trim();
         document.getElementById("input_department").value = row.dataset.departmentId;
-        document.getElementById("input_position").value = row.dataset.positionId; 
+        document.getElementById("input_position").value = row.dataset.positionId;
 
-        console.log(document.getElementById("input_department").value + " et " +document.getElementById("input_position").value )
+        console.log(document.getElementById("input_department").value + " et " + document.getElementById("input_position").value)
+
+        show_form("update_form");
+
+    } else if (e.target.matches("#show_form")) {
+
+        show_form("register_form");
+
+    } else if (e.target.matches("#register_form")) {
+
+        show_form("register_form");
+
+    } else if (e.target.matches("#register_form2")) {
+
+        show_form("register_form2");
+
+    } else if (e.target.matches("#show_form2")) {
+
+        show_form("register_form2");
+
+    } else if (e.target.matches("#update_form")) {
 
         show_form("update_form");
 
-    } else if(e.target.matches("#show_form")){
-
-        show_form("register_form");
-        
-    } else if(e.target.matches("#register_form")){
-
-        show_form("register_form");
-        
-    }else if(e.target.matches("#register_form2")){
-
-        show_form("register_form2");
-        
-    }else if(e.target.matches("#show_form2")){
-
-        show_form("register_form2");
-        
-    }else if(e.target.matches("#update_form")){
-
-        show_form("update_form");
-        
     } else if (e.target.matches(".btn-delete")) {
         const empId = e.target.closest("tr").dataset.id;
-        
-        if (confirm("Supprimer cet employé ?")) {
+
+        if (confirm("delete this employee ?")) {
             fetch(`/delete_employee/${empId}`, {
                 method: 'DELETE'
             })
-            .then(res => {
-                if (!res.ok) throw new Error("Erreur suppression");
-                return res.json();
-            })
-            .then(data => {
-                e.target.closest("tr").remove();
-                showToast("Employee deleted !")
-            })
-            .catch(error => {
-                console.error("Erreur :", error);
-                alert("Échec de la suppression.");
-            });
+                .then(res => {
+                    if (!res.ok) throw new Error("deletion error !");
+                    return res.json();
+                })
+                .then(data => {
+                    e.target.closest("tr").remove();
+                    showToast("Employee deleted !")
+                })
+                .catch(error => {
+                    console.error("Erreur :", error);
+                    alert("deletion failed !");
+                });
         }
     } else if (e.target.matches(".btn-delete2")) {
-        const adId = e.target.closest("tr").dataset.id;    
-        
-        if (confirm("Supprimer cet admin ?")) {
+        const adId = e.target.closest("tr").dataset.id;
+
+        if (confirm("Delete this admin ?")) {
             fetch(`/delete_admin/${adId}`, {
                 method: 'DELETE'
             })
-            .then(res => {
-                if (!res.ok) throw new Error("Erreur suppression");
-                return res.json();
-            })
-            .then(data => {
-                e.target.closest("tr").remove();
-                showToast("Admin deleted !")
-            })
-            .catch(error => {
-                console.error("Erreur :", error);
-                alert("Échec de la suppression.");
-            });
+                .then(res => {
+                    if (!res.ok) throw new Error("deletion error!");
+                    return res.json();
+                })
+                .then(data => {
+                    e.target.closest("tr").remove();
+                    showToast("Admin deleted !")
+                })
+                .catch(error => {
+                    console.error("Erreur :", error);
+                    alert("Deletion failed");
+                });
         }
     }
 })
 
 document.querySelectorAll('.sidebar-link').forEach(link => {
-  link.addEventListener('click', function (e) {
-    if (!this.classList.contains("logout_btn")) {
-      e.preventDefault(); 
-      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-      this.classList.add('active');
-    }
-  });
+    link.addEventListener('click', function (e) {
+        if (!this.classList.contains("logout_btn")) {
+            e.preventDefault();
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+        }
+    });
 });
 
 function generate_pass(trgt) {
-    const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
     let pass = "";
     for (let i = 1; i <= 8; i++) {
         pass += chars[Math.floor(Math.random() * chars.length)];
@@ -195,14 +195,14 @@ function generate_pass(trgt) {
     document.getElementById(trgt).value = pass
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded', () => {
     const delay = 5000;
 
-    setTimeout(()=>{
-        document.querySelectorAll(".flash_msg").forEach((msg)=>{
+    setTimeout(() => {
+        document.querySelectorAll(".flash_msg").forEach((msg) => {
             msg.style.transition = "opacity 0.5s";
             msg.style.opacity = "0";
-            setTimeout(()=>msg.remove(), 500);
+            setTimeout(() => msg.remove(), 500);
         })
     }, delay)
 })

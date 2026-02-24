@@ -1,18 +1,22 @@
 <div class="px-4 pt-2 manage_sec">
-    <h2>MANAGER</h2>
+    <div class="report_title">
+        <p>USERS MANAGER</p>
+    </div>
     <div>
         <div class="manage_form_sec">
             <div>
-                <form action="/load/manage_data" method="post" data-target=".manager_data_table" class="d-flex flex-row gap-2">
-                    <select name="department_id" id="" class="general-input">
+                <form action="/load/manage_data" method="post" data-target=".manager_data_table"
+                    class="d-flex flex-row gap-2">
+                    <select name="department_id" id="dep_select2" class="general-input filter-input">
+                        <option value=0>Select a department</option>
                         {% for dep in departments %}
-                            <option value="{{ dep.id}}">{{ dep.name }}</option>
+                        <option value="{{ dep.id}}">{{ dep.name }}</option>
                         {% endfor %}
                     </select>
                     <input type="submit" value="Search" class="button">
                 </form>
             </div>
-            <button id="show_form" class="button register-btn">Register an employee</button>
+            <button id="show_form" class="button register-btn">Create a user account</button>
         </div>
 
         <div class="spinner-border text-success mt-3 global-spinner" role="status" style="display: none;">
@@ -20,10 +24,11 @@
         </div>
         <div class="manager_data_table"></div>
 
-       
 
-        <form action="/update_emp" method="post" data-target=".manager_data_table" id="update_form" style="display: none;">
-           <div class="form_content">
+
+        <form action="/update_emp" method="post" data-target=".manager_data_table" id="update_form"
+            style="display: none;">
+            <div class="form_content">
                 <input type="hidden" name="emp_id" id="input_id">
                 <div>
                     <label for="input_name">Name</label>
@@ -39,7 +44,7 @@
                 </div>
                 <div>
                     <label for="input_sex">Sex</label>
-                     <select name="emp_sex" id="input_sex" class="input_emp_sex" required>
+                    <select name="emp_sex" id="input_sex" class="input_emp_sex" required>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                     </select>
@@ -49,7 +54,7 @@
                         <label for="input_position">Position</label>
                         <select name="emp_position" id="input_position">
                             {% for pos in positions %}
-                                <option value="{{ pos.id}}">{{ pos.name }}</option>
+                            <option value="{{ pos.id}}">{{ pos.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -57,7 +62,7 @@
                         <label for="input_department">Department</label>
                         <select name="emp_department" id="input_department">
                             {% for dep in departments %}
-                                <option value="{{ dep.id}}">{{ dep.name }}</option>
+                            <option value="{{ dep.id}}">{{ dep.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -65,14 +70,16 @@
                 <div>
                     <label for="emp_pass">New password</label>
                     <div class="d-flex flex-row gap-2">
-                        <input type="text" name="updt_emp_pass" id="emp_pass" class="input_pass_g create_pass" autocomplete="new-password" readonly>
-                        <button onclick="generate_pass('emp_pass')"  type="button" id="gen_updt" class="btn pass_btn"><i class="bi bi-lock-fill"></i></button>
+                        <input type="text" name="updt_emp_pass" id="emp_pass" class="input_pass_g create_pass"
+                            autocomplete="new-password" readonly>
+                        <button onclick="generate_pass('emp_pass')" type="button" id="gen_updt" class="btn pass_btn"><i
+                                class="bi bi-lock-fill"></i></button>
                     </div>
                 </div>
-                <button type="submit">Update</button>   
-           </div>
+                <button type="submit">Update</button>
+            </div>
         </form>
-            
+
         <form action="/create_emp" data-target=".message" method="post" id="register_form" style="display: none;">
 
             <div class="form_content">
@@ -101,7 +108,7 @@
                         <label for="input_emp_position">Position</label>
                         <select name="new_emp_position" id="input_emp_position">
                             {% for pos in positions %}
-                                <option value="{{ pos.id}}">{{ pos.name }}</option>
+                            <option value="{{ pos.id}}">{{ pos.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -109,7 +116,7 @@
                         <label for="input_emp_department">Department</label>
                         <select name="new_emp_department" id="input_emp_department">
                             {% for dep in departments %}
-                                <option value="{{ dep.id}}">{{ dep.name }}</option>
+                            <option value="{{ dep.id}}">{{ dep.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -117,8 +124,10 @@
                 <div>
                     <label for="input_emp_pass">Password</label>
                     <div class="d-flex flex-row gap-2">
-                        <input type="text" name="emp_pass" id="input_emp_pass" class="input_pass_g" autocomplete="new-password"  readonly required>
-                        <button onclick="generate_pass('input_emp_pass')" type="button" id="gen_creat" class="btn pass_btn"><i class="bi bi-lock-fill"></i></button>
+                        <input type="text" name="emp_pass" id="input_emp_pass" class="input_pass_g"
+                            autocomplete="new-password" readonly required>
+                        <button onclick="generate_pass('input_emp_pass')" type="button" id="gen_creat"
+                            class="btn pass_btn"><i class="bi bi-lock-fill"></i></button>
                     </div>
                 </div>
                 <button type="submit">Create</button>

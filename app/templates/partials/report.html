@@ -1,17 +1,21 @@
 <div class="px-4 pt-2 report-sec">
-    <h2>REPORTS</h2>
+    <div class="report_title">
+        <p>REPORTS</p>
+    </div>
     <div>
-        
+
         <div class="report_form_sec">
             <div>
-                <form action="/load/report_data" method="post" data-target=".data_table" class="d-flex flex-row gap-2" id="search_form">
-                    <select name="department_id" id="dep_id" class="general-input">
+                <form action="/load/report_data" method="post" data-target=".data_table" class="d-flex flex-row gap-2"
+                    id="search_form">
+                    <select name="department_id" id="dep_id" class="general-input filter-input">
+                        <option>Select a department</option>
                         {% for dep in departments %}
-                            <option value="{{ dep.id}}">{{ dep.name }}</option>
+                        <option value="{{ dep.id}}">{{ dep.name }}</option>
                         {% endfor %}
                     </select>
-                    <input type="date" name="start_date" id="start" class="general-input" required>
-                    <input type="date" name="end_date" id="end" class="general-input" required>
+                    <input type="date" name="start_date" id="start" class="general-input filter-input" required>
+                    <input type="date" name="end_date" id="end" class="general-input filter-input" required>
                     <input type="submit" value="Search" class="button" id="search_btn">
                 </form>
             </div>
@@ -20,7 +24,7 @@
                     <input type="hidden" name="exp_dep_id" id="exp_dep_id">
                     <input type="hidden" name="exp_start_date" id="exp_start_date">
                     <input type="hidden" name="exp_end_date" id="exp_end_date">
-                    <select name="export_type" id="exp_type" class="general-input">
+                    <select name="export_type" id="exp_type" class="general-input filter-input">
                         <option value="excel">excel</option>
                         <option value="pdf">pdf</option>
                         <option value="csv">csv</option>
@@ -33,16 +37,18 @@
             <span class="sr-only"></span>
         </div>
         <div class="data_table"></div>
-        
+
 
         {% with messages = get_flashed_messages(with_categories=true)%}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} mt-3 flash_msg" style='width:400px;'><p>{{ message }}</p></div>
-                {% endfor %}
-            {% endif %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} mt-3 flash_msg" style='width:400px;'>
+            <p>{{ message }}</p>
+        </div>
+        {% endfor %}
+        {% endif %}
         {% endwith %}
-        
+
         <div class="lamda" style="display:none ;"></div>
     </div>
 </div>
