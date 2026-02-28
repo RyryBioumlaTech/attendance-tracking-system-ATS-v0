@@ -1,6 +1,10 @@
 <div class="px-4 pt-2 manage_sec">
     <div class="report_title">
-        <p>USERS MANAGER</p>
+        <div
+            style="display: flex; gap: 10px; font-weight: 600; color: #b6b6b6; align-items: center; margin-bottom: 5px;">
+            <i class="bi bi-people-fill"></i>
+            <span>USERS MANAGER</span>
+        </div>
     </div>
     <div>
         <div class="manage_form_sec">
@@ -13,16 +17,21 @@
                         <option value="{{ dep.id}}">{{ dep.name }}</option>
                         {% endfor %}
                     </select>
-                    <input type="submit" value="Search" class="button">
+                    <button type="submit" class="button" style="display: flex; gap: 5px;">
+                        <i class="bi bi-search"></i>
+                        Search
+                    </button>
                 </form>
             </div>
-            <button id="show_form" class="button register-btn">Create a user account</button>
+            <button id="show_form" class="button register-btn">+ Create a user account</button>
         </div>
 
         <div class="spinner-border text-success mt-3 global-spinner" role="status" style="display: none;">
             <span class="sr-only"></span>
         </div>
-        <div class="manager_data_table"></div>
+        <div class="manager_data_table">
+            <p class="no-data-msg">No data found</p>
+        </div>
 
 
 

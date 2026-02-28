@@ -84,8 +84,6 @@ def saveCheckpoints(moment_recieved, employee_id):
 
 
 @qr_code_bp.route('/qr_code')
-@login_required
-@admin_required
 def show():
     img_base64 = generate_qr_base64()
     return render_template('qr_code.html', qr_code=img_base64)

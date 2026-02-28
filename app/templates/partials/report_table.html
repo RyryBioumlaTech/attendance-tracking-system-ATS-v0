@@ -22,10 +22,10 @@
                 <thead>
                     <tr>
                         <th class="th1">Employee</th>
-                        <th >Date</th>
-                        <th >Entry Hour</th>
-                        <th >Exit Hour</th>
-                        <th >Work Time</th>
+                        <th>Date</th>
+                        <th>Entry Hour</th>
+                        <th>Exit Hour</th>
+                        <th>Work Time</th>
                         <th class="th2">Status</th>
                     </tr>
                 </thead>
@@ -35,20 +35,20 @@
             <table class="mdrn_table2">
                 <tbody>
                     {% for row in report_rows %}
-                        <tr>
-                            <td class="td1">{{ row.name }}</td>
-                            <td>{{ row.date }}</td>
-                            <td>{{ row.entry }}</td>
-                            <td>{{ row.exit }}</td>
-                            <td>{{ row.work_time }}</td>
-                            <td class="td2">{{ row.status }}</td>
-                        </tr>
+                    <tr>
+                        <td class="td1">{{ row.name }}</td>
+                        <td>{{ row.date }}</td>
+                        <td>{{ row.entry }}</td>
+                        <td>{{ row.exit }}</td>
+                        <td>{{ row.work_time }}</td>
+                        <td class="td2">{{ row.status }}</td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
-    
+
     <div class="table_sec">
         <div>
             <table class="mdrn_table ">
@@ -67,20 +67,20 @@
         <div class="table-body">
             <table class="mdrn_table2">
                 <tbody>
-                   {% for row in resume %}
+                    {% for row in resume %}
 
-                        <tr>
-                            <td class="td1">{{ row.name}}</td>
-                            <td>{{ row.nb_abs }}</td>
-                            <td>{{ row.total_work_time }}</td>
-                            <td>{{ row.mean_work_time }}</td>
-                            <td>{{ row.average_arrival }}</td>
-                            <td class="td2">{{ row.average_departure  }}</td>
-                        </tr>
+                    <tr>
+                        <td class="td1">{{ row.name}}</td>
+                        <td>{{ row.nb_abs }}</td>
+                        <td>{{ row.total_work_time }}</td>
+                        <td>{{ row.mean_work_time }}</td>
+                        <td>{{ row.average_arrival }}</td>
+                        <td class="td2">{{ row.average_departure }}</td>
+                    </tr>
 
                     {% endfor %}
                 </tbody>
             </table>
-        </div>    
+        </div>
     </div>
 </div>

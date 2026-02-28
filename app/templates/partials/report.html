@@ -1,6 +1,10 @@
 <div class="px-4 pt-2 report-sec">
     <div class="report_title">
-        <p>REPORTS</p>
+        <div
+            style="display: flex; gap: 10px; font-weight: 600; color: #b6b6b6; align-items: center; margin-bottom: 5px;">
+            <i class="bi bi-list-task"></i>
+            <span>REPORTS</span>
+        </div>
     </div>
     <div>
 
@@ -14,9 +18,15 @@
                         <option value="{{ dep.id}}">{{ dep.name }}</option>
                         {% endfor %}
                     </select>
+                    <span>from : </span>
                     <input type="date" name="start_date" id="start" class="general-input filter-input" required>
+                    <span>to : </span>
                     <input type="date" name="end_date" id="end" class="general-input filter-input" required>
-                    <input type="submit" value="Search" class="button" id="search_btn">
+                    <!-- <input type="submit" value="Search" class="button" id="search_btn"> -->
+                    <button type="submit" class="button" id="search_btn" style="display: flex; gap: 5px;">
+                        <i class="bi bi-search"></i>
+                        Search
+                    </button>
                 </form>
             </div>
             <div style="width: fit-content;">
@@ -29,14 +39,16 @@
                         <option value="pdf">pdf</option>
                         <option value="csv">csv</option>
                     </select>
-                    <input type="submit" value="Export" id="exp-btn" class="button">
+                    <input type="submit" value="Export Data" id="exp-btn" class="button">
                 </form>
             </div>
         </div>
         <div class="spinner-border text-success mt-3 global-spinner" role="status" style="display: none;">
             <span class="sr-only"></span>
         </div>
-        <div class="data_table"></div>
+        <div class="data_table">
+            <p class="no-data-msg">No data found</p>
+        </div>
 
 
         {% with messages = get_flashed_messages(with_categories=true)%}

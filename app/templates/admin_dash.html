@@ -24,7 +24,7 @@
                 MANAGEMENT
             </p>
             <li class="sidebar-item">
-                <a href="#" class="sidebar-link" onclick="loadsec('manage')"><i class="bi bi-person-fill"></i><span>
+                <a href="#" class="sidebar-link" onclick="loadsec('manage')"><i class="bi bi-people-fill"></i><span>
                         Users</span></a>
             </li>
             {% if user.role == 'superAd' %}
@@ -43,8 +43,8 @@
             </a>
         </div>
     </aside>
+    <div id="main-content"></div>
 </div>
-<div id="main-content"></div>
 {% endblock %}
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/main_dashb.js')}}"></script>

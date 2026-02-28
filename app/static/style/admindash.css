@@ -1,3 +1,12 @@
+@font-face {
+    font-family: 'Inter';
+    /* On définit l'intervalle des graisses supportées */
+    src: url('../font/Inter/interVar.ttf') format('truetype-variations');
+    font-weight: 100 900;
+    font-display: swap;
+    font-style: normal;
+}
+
 :root {
     --green: #1E7F4F;
     --red: #CE1126;
@@ -10,12 +19,16 @@
     --shadow-color: rgba(0, 0, 0, 0.2);
     --overlay-bg-f: rgb(0, 0, 0);
     --overlay-bg-s: rgba(0, 0, 0, 0.4);
+
 }
 
-* {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     text-decoration: none;
     list-style: none;
+    font-family: 'Inter', sans-serif;
 }
 
 body::-webkit-scrollbar {
@@ -28,24 +41,28 @@ body {
     font-family: System UI, Segoe UI, Roboto, Helvetica Neue, Arial;
     line-height: 1.5;
     min-height: 100vh;
-    height: 100vh;
-    min-width: 100vw;
+    margin: 0;
+    padding: 0;
     background-color: var(--bg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow-x: hidden;
-    flex-direction: row;
+}
+
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
 }
 
 #main-content {
+    flex: 1;
+    min-width: 0;
     min-height: 100vh;
     transition: all 0.35s ease-in-out;
     background-color: var(--bg);
-    flex-grow: 1;
     padding-bottom: 10px;
     margin-left: 230px;
-    overflow-y: hidden;
+    overflow-x: hidden;
+    position: relative;
 }
 
 #sidebar {
@@ -135,46 +152,39 @@ a.sidebar-link.active {
 .report-sec {
     width: 100%;
     padding-top: 10px;
-    position: absolute;
-    overflow-y: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
     padding-bottom: 10px;
 }
 
 .mdrn_table {
-    min-width: 90%;
-    width: fit-content;
+    width: 100%;
 }
 
 .mdrn_table2 {
-    min-width: 100%;
-    width: fit-content;
+    width: 100%;
 }
 
 .table_sec {
     width: 100%;
-    margin-left: -25px;
-    padding-left: 25px;
-    padding-right: 70px;
     padding-top: 15px;
+}
+
+.table_sec table {
+    width: 100%;
 }
 
 .report_form_sec {
     width: 100%;
-    margin-left: -25px;
-    padding-left: 25px;
     display: flex;
     flex-direction: row;
-    padding-right: 194px;
     justify-content: space-between;
 }
 
 .manage_form_sec {
     width: 100%;
-    margin-left: -25px;
-    padding-left: 25px;
     display: flex;
     flex-direction: row;
-    padding-right: 194px;
     justify-content: space-between;
 }
 
@@ -426,8 +436,8 @@ thead {
 .table-body {
     max-height: 500px;
     overflow-y: auto;
-    width: 90%;
-    margin-right: 80px;
+    overflow-x: hidden;
+    width: 100%;
     scrollbar-width: none;
     /* Firefox */
     -ms-overflow-style: none;
@@ -468,7 +478,8 @@ thead {
 }
 
 .admin-manager {
-    margin-right: 70%;
+    width: 60%;
+    min-width: 300px;
     box-sizing: border-box;
     overflow: hidden;
 }
@@ -523,8 +534,6 @@ thead {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding-right: 215px;
-    box-sizing: border-box;
     width: 100%;
 }
 
@@ -534,4 +543,12 @@ thead {
 
 #dep_select2 {
     width: 170px;
+}
+
+.no-data-msg {
+    text-align: center;
+    color: #999;
+    font-size: 1.1rem;
+    margin-top: 60px;
+    font-weight: 500;
 }
