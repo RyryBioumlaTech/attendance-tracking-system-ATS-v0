@@ -288,7 +288,7 @@ def create_emp_account():
     new_emp_sex = request.form.get('new_emp_sex')
     new_emp_pos = request.form.get('new_emp_position')
     new_emp_dep = request.form.get('new_emp_department')
-    emp_pass = request.form.get('emp_pass')
+    emp_pass = "12345678"
     new_emp_surname = request.form.get('new_emp_surname')
 
     if not new_emp_name or not new_emp_email or not new_emp_sex or not new_emp_pos or not new_emp_dep or not emp_pass:
@@ -299,11 +299,7 @@ def create_emp_account():
     
     if new_emp_email.isdigit() or new_emp_email.strip() == "":
         return '<div class="alert alert-warning flash_msg"><p>Enter a valid email !</p></div>'
-    
-
-    if len(emp_pass)<6 or emp_pass.strip() == "":
-        return '<div class="alert alert-warning flash_msg"><p> Enter a 6 characters password at least </p></div>'
-    
+        
     employee_by_email = Employee.query.filter(Employee.email == new_emp_email).all()
     employee_by_name = Employee.query.filter(Employee.name == new_emp_name).all()
 

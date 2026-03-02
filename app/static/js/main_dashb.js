@@ -186,15 +186,6 @@ document.querySelectorAll('.sidebar-link').forEach(link => {
     });
 });
 
-function generate_pass(trgt) {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
-    let pass = "";
-    for (let i = 1; i <= 8; i++) {
-        pass += chars[Math.floor(Math.random() * chars.length)];
-    }
-    document.getElementById(trgt).value = pass
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     const delay = 5000;
 
