@@ -1,95 +1,140 @@
-from flask import render_template, request, redirect, url_for, flash, session
+from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, login_required, logout_user, current_user
-from app.models import Admin, Employee
-from app.models import db
+from app.models import User, db
 from app.login import login_bp
-from app.utils import employee_required
+import os
 
 
-@login_bp.route('/')
+DEFAULT_PASSWORD = os.getenv("DEFAULT_EMP_PASSWORD")
+
+
+@login_bp.route("/")
 def show():
-    return render_template('login.html')
+    return render_template("login.html")
 
 
-@login_bp.route('/login', methods=['POST'])
+# -----------------------------
+# LOGIN
+# -----------------------------
+@login_bp.route("/login", methods=["POST"])
 def login():
 
-    email = request.form.get('email')
-    password = request.form.get('password')
+    email = request.form.get("email", "").strip()
+    password = request.form.get("password", "").strip()
 
-    user = Employee.query.filter_by(email=email).first()
-    admin = Admin.query.filter_by(login=email).first()
+    if not email or not password:
+        flash("Please fill all fields", "warning")
+        return redirect(url_for("login.show"))
 
-    # LOGIN EMPLOYEE
-    if user and user.verify_pass(password):
+    user = User.query.filter_by(email=email).first()
+    print('this is user : ', user)
+    print('password received : ', password)
+    print('password hash in db : ', user.password_hash if user else 'no user found')
+    print('current password hashed : ', user.set_password(password) or user.password_hash if user else 'no user found')
+    print('password verified : ', user.verify_pass(password) if user else 'no user found')
 
-        login_user(user)
-        session['user_type'] = 'employee'
+    if not user or not user.verify_pass(password):
+        flash("Invalid credentials", "danger")
+        return redirect(url_for("login.show"))
+
+    login_user(user)
+
+    # -----------------------------
+    # ADMIN LOGIN
+    # -----------------------------
+    if user.is_admin() or user.is_super_admin():
+        return redirect(url_for("dashboard.admin_dash"))
+
+    # -----------------------------
+    # EMPLOYEE LOGIN
+    # -----------------------------
+    if user.is_employee():
 
         # mot de passe par défaut → forcer changement
-        if user.verify_pass("12345678"):
-            return redirect(url_for('login.changePass'))
+        if user.verify_pass(DEFAULT_PASSWORD):
+            flash("You must change your default password", "warning")
+            return redirect(url_for("login.changePass"))
 
-        return redirect(url_for('login.scanner'))
+        return redirect(url_for("login.scanner"))
 
-    # LOGIN ADMIN
-    if admin and admin.verify_pass(password):
-
-        login_user(admin)
-        session['user_type'] = 'admin'
-        return redirect(url_for('dashboard.admin_dash'))
-
-    flash('Identifiants invalides !', 'danger')
-    return redirect(url_for('login.show'))
+    flash("Unauthorized account", "danger")
+    return redirect(url_for("login.show"))
 
 
-@login_bp.route('/updatePass', methods=['POST'])
+# -----------------------------
+# PASSWORD CHANGE PAGE
+# -----------------------------
+@login_bp.route("/changePass")
 @login_required
-@employee_required
+def changePass():
+
+    # seuls les employés doivent accéder ici
+    if not current_user.is_employee():
+        return redirect(url_for("login.show"))
+
+    return render_template("changepass.html", user=current_user)
+
+
+# -----------------------------
+# UPDATE PASSWORD
+# -----------------------------
+@login_bp.route("/updatePass", methods=["POST"])
+@login_required
 def updatePass():
 
-    new_pass = request.form.get('password', '').strip()
-    confirmed_pass = request.form.get('confirm_password', '').strip()
+    if not current_user.is_employee():
+        return redirect(url_for("login.show"))
+
+    new_pass = request.form.get("password", "").strip()
+    confirmed_pass = request.form.get("confirm_password", "").strip()
 
     if not new_pass or not confirmed_pass:
-        flash('Please fill all fields', 'warning')
-        return redirect(url_for('login.changePass'))
+        flash("Please fill all fields", "warning")
+        return redirect(url_for("login.changePass"))
 
     if new_pass != confirmed_pass:
-        flash('Inputs must be the same', 'warning')
-        return redirect(url_for('login.changePass'))
+        flash("Passwords do not match", "warning")
+        return redirect(url_for("login.changePass"))
 
-    # on modifie uniquement le mot de passe de l'utilisateur connecté
-    user = current_user
+    if len(new_pass) < 8:
+        flash("Password must be at least 8 characters", "warning")
+        return redirect(url_for("login.changePass"))
 
-    user.create_pass(new_pass)
-    db.session.commit()
+    current_user.set_password(new_pass)
+
+    try:
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+        flash("Error updating password", "danger")
+        return redirect(url_for("login.changePass"))
 
     flash("Password updated successfully", "success")
+    return redirect(url_for("login.scanner"))
 
-    return redirect(url_for('login.scanner'))
 
-
-@login_bp.route('/scanner')
+# -----------------------------
+# EMPLOYEE SCANNER
+# -----------------------------
+@login_bp.route("/scanner")
 @login_required
-@employee_required
 def scanner():
-    return render_template('scanner.html', user=current_user)
+
+    if not current_user.is_employee():
+        return redirect(url_for("login.show"))
+
+    return render_template("scanner.html", user=current_user)
 
 
-@login_bp.route('/changePass')
-@login_required
-@employee_required
-def changePass():
-    return render_template('changepass.html', user=current_user)
-
-
-@login_bp.route('/logout')
+# -----------------------------
+# LOGOUT
+# -----------------------------
+@login_bp.route("/logout")
 @login_required
 def logout():
 
     logout_user()
-    session.clear()
 
-    flash('You have been logged out!', 'info')
-    return redirect(url_for('login.show'))
+    flash("You have been logged out", "info")
+
+    return redirect(url_for("login.show"))

@@ -1,32 +1,34 @@
 from flask import render_template, request, send_file, jsonify, redirect, flash, url_for
 from app.dashboard import dash_bp
-from app.models import Department, db, Employee, Checkpoints, Position, Admin
+from app.models import Department, db, User, Checkpoint, Position, CheckpointType
 from flask_login import login_required, current_user
 from collections import defaultdict
 from datetime import timedelta, datetime, time
 from weasyprint import HTML
-from app.utils import admin_required
 import pandas as pd 
 import io
 
 
 @dash_bp.route('/admin_dash')
 @login_required
-@admin_required
 def admin_dash():
+    if (not current_user.is_admin() and not current_user.is_super_admin()):
+        return redirect(url_for('login.show'))
     return render_template('admin_dash.html', user=current_user)
 
 @dash_bp.route('/load/reports')
 @login_required
-@admin_required
 def reportsdata():
+    if (not current_user.is_admin() and not current_user.is_super_admin()):
+        return redirect(url_for('login.show'))
     departments = Department.query.all()
     return render_template('partials/report.html', departments=departments)
 
 @dash_bp.route('/load/report_data', methods=['POST'])
 @login_required
-@admin_required
 def load_datas():
+    if (not current_user.is_admin() and not current_user.is_super_admin()):
+        return redirect(url_for('login.show'))
     department_id = request.form.get('department_id')
     start_date = request.form.get('start_date')
     end_date = request.form.get('end_date')
@@ -45,17 +47,17 @@ def load_datas():
                 dates.append(current)
             current += timedelta(days=1)
 
-        employees = Employee.query.filter_by(department_id=department_id).all()
+        employees = User.query.filter_by(department_id=department_id, role="employee").all()
 
         work_time = timedelta()
         status = None
         new_report_rows = []
         on_time = time(8, 30)
 
-        total_check =  Checkpoints.query.filter(
-                    Checkpoints.moment >= datetime.combine(starting, datetime.min.time()),
-                    Checkpoints.moment <= datetime.combine(ending, datetime.max.time())
-                ).order_by(Checkpoints.moment).first()
+        total_check =  Checkpoint.query.filter(
+                    Checkpoint.moment >= datetime.combine(starting, datetime.min.time()),
+                    Checkpoint.moment <= datetime.combine(ending, datetime.max.time())
+                ).order_by(Checkpoint.moment).first()
         
         if (starting > ending):
             return "<div class='alert alert-warning mt-3 flash_msg' style='width:400px;'><p>Select a valid perid!</p></div>"
@@ -64,19 +66,19 @@ def load_datas():
         
         for date in dates:   # boucle d'abord sur les dates
             for employee in employees:  # puis sur les employés
-                checkpoints_in = Checkpoints.query.filter(
-                    Checkpoints.employee_id == employee.id,
-                    Checkpoints.moment >= datetime.combine(date, datetime.min.time()),
-                    Checkpoints.moment <= datetime.combine(date, datetime.max.time()),
-                    Checkpoints.type_id == 1
-                ).order_by(Checkpoints.moment).first()
+                checkpoints_in = Checkpoint.query.filter(
+                    Checkpoint.employee_id == employee.id,
+                    Checkpoint.moment >= datetime.combine(date, datetime.min.time()),
+                    Checkpoint.moment <= datetime.combine(date, datetime.max.time()),
+                    Checkpoint.type_id == 1
+                ).order_by(Checkpoint.moment).first()
 
-                checkpoints_out = Checkpoints.query.filter(
-                    Checkpoints.employee_id == employee.id,
-                    Checkpoints.moment >= datetime.combine(date, datetime.min.time()),
-                    Checkpoints.moment <= datetime.combine(date, datetime.max.time()),
-                    Checkpoints.type_id == 2
-                ).order_by(Checkpoints.moment).first()
+                checkpoints_out = Checkpoint.query.filter(
+                    Checkpoint.employee_id == employee.id,
+                    Checkpoint.moment >= datetime.combine(date, datetime.min.time()),
+                    Checkpoint.moment <= datetime.combine(date, datetime.max.time()),
+                    Checkpoint.type_id == 2
+                ).order_by(Checkpoint.moment).first()
 
                 if checkpoints_in and checkpoints_out:
                     entry = checkpoints_in.moment.time()
@@ -171,21 +173,23 @@ def load_datas():
 #management logic
 @dash_bp.route('/load/manage')
 @login_required
-@admin_required
 def managedata():
+    if (not current_user.is_admin() and not current_user.is_super_admin()):
+        return redirect(url_for('login.show'))
     departments = Department.query.all()
     positions = Position.query.all()
     return render_template('partials/manage.html', departments=departments, positions=positions)
 
 @dash_bp.route('/load/manage_data', methods=['POST'])
 @login_required
-@admin_required
 def load_managed_data():
+    if (not current_user.is_admin() and not current_user.is_super_admin()):
+        return redirect(url_for('login.show'))
     department_id = request.form.get('department_id')
     print(department_id)
     if department_id == "0":
         return "<div class='alert alert-info mt-3 flash_msg' style='width:400px;'><p>Please select a department !</p></div>"
-    employee = db.session.query(Employee).filter(Employee.department_id==department_id)
+    employee = db.session.query(User).filter(User.department_id==department_id, User.role=="employee")
     list_employee = []
     for emp in employee:
         position = Position.query.filter(Position.id==emp.position_id).first()
@@ -207,21 +211,24 @@ def load_managed_data():
 
 @dash_bp.route('/load/admin-manager')
 @login_required
-@admin_required
 def laod_admin():
-    admin = Admin.query.all()
-    return render_template('partials/admin-manager.html', admin_list=admin, admin=current_user)
+    if (not current_user.is_admin() and not current_user.is_super_admin()):
+        return redirect(url_for('login.show'))
+    # fetch users with admin or super admin roles
+    admin_users = User.query.filter(User.role.in_(['admin','superAd'])).all()
+    return render_template('partials/admin-manager.html', admin_list=admin_users, admin=current_user)
 
 
 @dash_bp.route('/update_emp', methods=['POST'])
 @login_required
-@admin_required
 def update_infos_emp():
+    if (not current_user.is_admin() and not current_user.is_super_admin()):
+        return redirect(url_for('login.show'))
     emp_id = request.form.get("emp_id")
     if emp_id:
         emp_id = int(emp_id)
     else:
-        return "<div class='alert alert-warning mt-3 flash_msg' style='width:400px;'><p>Employee ID is required.</p></div>", 400
+        return "<div class='alert alert-warning mt-3 flash_msg' style='width:400px;'><p>User ID is required.</p></div>", 400
     emp_pos = request.form.get("emp_position")
     emp_dep = request.form.get("emp_department")
     emp_name = request.form.get("emp_name")
@@ -241,7 +248,7 @@ def update_infos_emp():
 
     emp_sex = request.form.get("emp_sex")
 
-    employee = Employee.query.filter(Employee.id==emp_id).first()
+    employee = User.query.filter(User.id==emp_id, User.role=="employee").first()
     emp_position = Position.query.filter(Position.name==emp_pos).first()
     emp_department = Department.query.filter(Department.id==emp_dep).first()
     
@@ -254,11 +261,11 @@ def update_infos_emp():
             employee.department_id = emp_department.id 
             employee.position_id = emp_position.id
         if (emp_new_pass and emp_new_pass.strip() != ""):
-            employee.create_pass(emp_new_pass)
+            employee.set_password(emp_new_pass)
     db.session.commit()
 
     if emp_department is not None :
-        employee = db.session.query(Employee).filter(Employee.department_id==emp_department.id).all()
+        employee = db.session.query(User).filter(User.department_id==emp_department.id, User.role=="employee").all()
     else:
         employee = [employee] if employee is not None else []
     list_employee = []
@@ -281,8 +288,9 @@ def update_infos_emp():
 
 @dash_bp.route('/create_emp', methods=["POST"])
 @login_required
-@admin_required
 def create_emp_account():
+    if (not current_user.is_admin() and not current_user.is_super_admin()):
+        return redirect(url_for('login.show'))
     new_emp_name = request.form.get('new_emp_name')
     new_emp_email = request.form.get('new_emp_email')
     new_emp_sex = request.form.get('new_emp_sex')
@@ -300,32 +308,34 @@ def create_emp_account():
     if new_emp_email.isdigit() or new_emp_email.strip() == "":
         return '<div class="alert alert-warning flash_msg"><p>Enter a valid email !</p></div>'
         
-    employee_by_email = Employee.query.filter(Employee.email == new_emp_email).all()
-    employee_by_name = Employee.query.filter(Employee.name == new_emp_name).all()
+    employee_by_email = User.query.filter(User.email == new_emp_email).all()
+    employee_by_name = User.query.filter(User.name == new_emp_name).all()
 
     if employee_by_email or employee_by_name:
         return '<div class="alert alert-warning flash_msg"><p> This employee is already registered </p></div>'
     
-    emp = Employee(
+    emp = User(
         name = new_emp_name, #type: ignore
         surname = new_emp_surname, #type: ignore
-        email = new_emp_email,#type: ignore
-        password = "", #type: ignore
+        email = new_emp_email, #type: ignore
         sex = new_emp_sex, #type: ignore
         position_id = new_emp_pos, #type: ignore
-        department_id = new_emp_dep #type: ignore
+        department_id = new_emp_dep, #type: ignore
+        role = "employee"
     )
-    emp.create_pass(emp_pass)
+    emp.set_passwordd(emp_pass)
     db.session.add(emp)
     db.session.commit()
 
-    return '<div class="alert alert-success flash_msg"><p> Employee registration success </p></div>'
+    return '<div class="alert alert-success flash_msg"><p> User registration success </p></div>'
 
 #export datas
 @dash_bp.route('/export_datas', methods=['POST'])
 @login_required
-@admin_required
 def export():
+    if (not current_user.is_admin() and not current_user.is_super_admin()):
+        return redirect(url_for('login.show'))
+    
     from app import socketio
 
     department_id = request.form.get('exp_dep_id')
@@ -348,7 +358,7 @@ def export():
                 dates.append(current)
             current += timedelta(days=1)
 
-        employees = Employee.query.filter_by(department_id=department_id).all()
+        employees = User.query.filter_by(department_id=department_id, role="employee").all()
         department = Department.query.filter(Department.id==department_id).first()
 
         work_time = timedelta()
@@ -356,27 +366,27 @@ def export():
         new_report_rows = []
         on_time = time(8, 30)
 
-        total_check =  Checkpoints.query.filter(
-                    Checkpoints.moment >= start_date,
-                    Checkpoints.moment <= end_date
-                ).order_by(Checkpoints.moment).first()
+        total_check =  Checkpoint.query.filter(
+                    Checkpoint.moment >= start_date,
+                    Checkpoint.moment <= end_date
+                ).order_by(Checkpoint.moment).first()
         
         checkpoints_in = []
         checkpoints_out = []
         for employee in employees:
             for date in dates:
-                checkpoints_in = Checkpoints.query.filter(
-                    Checkpoints.employee_id == employee.id,
-                    Checkpoints.moment >= datetime.combine(date, datetime.min.time()),
-                    Checkpoints.moment <= datetime.combine(date, datetime.max.time()),
-                    Checkpoints.type_id == 1
-                ).order_by(Checkpoints.moment).first()
-                checkpoints_out = Checkpoints.query.filter(
-                    Checkpoints.employee_id == employee.id,
-                    Checkpoints.moment >= datetime.combine(date, datetime.min.time()),
-                    Checkpoints.moment <= datetime.combine(date, datetime.max.time()),
-                    Checkpoints.type_id == 2
-                ).order_by(Checkpoints.moment).first()
+                checkpoints_in = Checkpoint.query.filter(
+                    Checkpoint.employee_id == employee.id,
+                    Checkpoint.moment >= datetime.combine(date, datetime.min.time()),
+                    Checkpoint.moment <= datetime.combine(date, datetime.max.time()),
+                    Checkpoint.type_id == 1
+                ).order_by(Checkpoint.moment).first()
+                checkpoints_out = Checkpoint.query.filter(
+                    Checkpoint.employee_id == employee.id,
+                    Checkpoint.moment >= datetime.combine(date, datetime.min.time()),
+                    Checkpoint.moment <= datetime.combine(date, datetime.max.time()),
+                    Checkpoint.type_id == 2
+                ).order_by(Checkpoint.moment).first()
 
                 if checkpoints_in and checkpoints_out:
                     entry = checkpoints_in.moment.time()
@@ -528,9 +538,13 @@ def export():
 
 @dash_bp.route('/delete_employee/<int:id>', methods=['DELETE'])
 @login_required
-@admin_required
 def delete_employee(id):
-    employee = Employee.query.get_or_404(id)
+    if (not current_user.is_admin() and not current_user.is_super_admin()):
+        return redirect(url_for('login.show'))
+    employee = User.query.get_or_404(id)
+    # ensure the user is actually an employee
+    if employee.role != 'employee':
+        return jsonify({'message': 'User is not an employee'}), 400
     db.session.delete(employee)
     db.session.commit()
     return jsonify({'message': 'Employé supprimé avec succès'})
@@ -538,22 +552,27 @@ def delete_employee(id):
 
 @dash_bp.route('/delete_admin/<int:id>', methods=['DELETE'])
 @login_required
-@admin_required
 def delete_admin(id):
-    admin = Admin.query.get_or_404(id)
+    if (not current_user.is_super_admin()):
+        return redirect(url_for('login.show'))
+    admin = User.query.get_or_404(id)
+    # optionally verify role
+    if admin.role not in ('admin','superAd'):
+        return jsonify({'message': 'User is not an admin'}), 400
     db.session.delete(admin)
     db.session.commit()
     return jsonify({'message': 'Admin supprimé avec succès'})
 
 @dash_bp.route('/create_admin', methods=["POST"])
 @login_required
-@admin_required
 def create_admin_account():
-    new_ad_login = request.form.get('new_ad_login')
+    if (not current_user.is_super_admin()):
+        return redirect(url_for('login.show'))
+    new_ad_email = request.form.get('new_ad_login')
     ad_pass = request.form.get('new_ad_pass')
     confirm_ad_pass = request.form.get('confirm_ad_pass')
 
-    if not new_ad_login or  not ad_pass or not confirm_ad_pass:
+    if not new_ad_email or  not ad_pass or not confirm_ad_pass:
         return '<p> Please fill all fields </p>'
     
     if len(ad_pass)<6:
@@ -562,16 +581,16 @@ def create_admin_account():
     if ad_pass != confirm_ad_pass:
         return '<p> confirm password does not match </p>'
     
-    admin_by_login = Admin.query.filter(Admin.login == new_ad_login).all()
+    admin_by_email = User.query.filter(User.email == new_ad_email).all()
 
-    if admin_by_login:
+    if admin_by_email:
         return '<p> This admin is already registered </p>'
     
-    admin = Admin(
-        login = new_ad_login, #type: ignore
-        password_hashed = "", #type: ignore
+    admin = User(
+        email = new_ad_email, #type: ignore
+        role = 'admin'
     )
-    admin.create_pass(ad_pass)
+    admin.set_password(ad_pass)
     db.session.add(admin)
     db.session.commit()
 

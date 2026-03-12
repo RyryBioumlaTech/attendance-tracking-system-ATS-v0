@@ -7,7 +7,7 @@ pymysql.install_as_MySQLdb()
 from app.qr_code import qr_code_bp
 from app.login import login_bp
 from app.dashboard import dash_bp
-from app.models import db, Employee, Admin
+from app.models import db, User
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 from app.utils import create_default_admin
@@ -40,12 +40,8 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        user_type = session.get('user_type')
-        if user_type == 'admin':
-            return Admin.query.get(int(user_id))
-        elif user_type == 'employee':
-            return Employee.query.get(int(user_id))
-        return None
+        # flask-login only needs id lookup; role-specific behavior is handled elsewhere
+        return User.query.get(int(user_id))
 
     app.register_blueprint(qr_code_bp)
     app.register_blueprint(login_bp)

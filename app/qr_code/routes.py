@@ -4,13 +4,13 @@ from app.dashboard import dash_bp
 from app.signature import generate_signature, compare_signature
 from flask_login import login_required, current_user
 from datetime import datetime, timedelta, date
-from app.models import Employee, Checkpoints, Type, db
+from app.models import User, Checkpoint, CheckpointType, db
 from io import BytesIO
 import base64, secrets
 import qrcode
 import json
 
-from app.utils import admin_required
+
 
 used_nonces = set()
 
@@ -50,21 +50,21 @@ def saveCheckpoints(moment_recieved, employee_id):
     today_min = datetime.combine(today, datetime.min.time())
     today_max = datetime.combine(today, datetime.max.time())
 
-    type_in = Type.query.filter_by(value="IN").first()
-    type_out = Type.query.filter_by(value="OUT").first()
+    type_in = CheckpointType.query.filter_by(value="IN").first()
+    type_out = CheckpointType.query.filter_by(value="OUT").first()
 
-    checkpoint_in = Checkpoints.query.join(Type).filter(
-        Checkpoints.employee_id==employee_id, # type: ignore
-        Checkpoints.moment<=today_max,
-        Checkpoints.moment>=today_min,
-        Type.value=="IN" 
+    checkpoint_in = Checkpoint.query.join(CheckpointType).filter(
+        Checkpoint.employee_id==employee_id, # type: ignore
+        Checkpoint.moment<=today_max,
+        Checkpoint.moment>=today_min,
+        CheckpointType.value=="IN" 
     ).all()
 
-    checkpoint_out = Checkpoints.query.join(Type).filter(
-        Checkpoints.employee_id==employee_id, # type: ignore
-        Checkpoints.moment<=today_max,
-        Checkpoints.moment>=today_min,
-        Type.value=="OUT" 
+    checkpoint_out = Checkpoint.query.join(CheckpointType).filter(
+        Checkpoint.employee_id==employee_id, # type: ignore
+        Checkpoint.moment<=today_max,
+        Checkpoint.moment>=today_min,
+        CheckpointType.value=="OUT" 
     ).all()
 
     if(checkpoint_in):
@@ -73,11 +73,11 @@ def saveCheckpoints(moment_recieved, employee_id):
             check_id.moment =  moment_recieved
             db.session.commit()
         else:
-            new_checkpoint = Checkpoints(moment=moment_recieved, employee_id=employee_id, type_id=type_out.id) # type: ignore
+            new_checkpoint = Checkpoint(moment=moment_recieved, employee_id=employee_id, type_id=type_out.id) # type: ignore
             db.session.add(new_checkpoint)
             db.session.commit()
     else:
-        new_checkpoint = Checkpoints(moment=moment_recieved, employee_id=employee_id, type_id=type_in.id) # type: ignore
+        new_checkpoint = Checkpoint(moment=moment_recieved, employee_id=employee_id, type_id=type_in.id) # type: ignore
         db.session.add(new_checkpoint)
         db.session.commit()
 

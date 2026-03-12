@@ -24,7 +24,7 @@
                     {% for ad in admin_list %}
                     <tr data-id="{{ ad.id }}" style="color: #939191;">
                         <td class="id td1">#{{ ad.id}}</td>
-                        <td class="name">{{ ad.login }}</td>
+                        <td class="name">{{ ad.email }}</td>
                         <td class="email">{{ ad.role }}</td>
                         <td class="td2">
                             {% if admin.login != ad.login %}
