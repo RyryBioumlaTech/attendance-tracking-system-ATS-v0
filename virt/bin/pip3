@@ -1,4 +1,4 @@
-#!/home/ryan-bioumla/Documents/internship_report/attendanceTracking/virt/bin/python3
+#!/home/ryry/Dev/attendance-tracking-system-ATS-v0/virt/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
