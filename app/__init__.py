@@ -9,6 +9,11 @@ from app.login import login_bp
 from app.dashboard import dash_bp
 from app.models import db, Employee, Admin
 from flask_migrate import Migrate
+from dotenv import load_dotenv
+from app.utils import create_default_admin
+import os
+
+load_dotenv()
 
 login_manager = LoginManager()
 
@@ -18,11 +23,15 @@ def create_app():
     app = Flask(__name__)
 
     
-    app.secret_key = 'bpsr15Dieu@' 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/gpDb'
+    app.secret_key = os.getenv('SECRET_KEY')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
+
+    with app.app_context():
+        db.create_all()  # Crée les tables si elles n'existent pas
+        create_default_admin()
 
     login_manager.init_app(app)
     login_manager.login_view = 'login.show'  # type: ignore

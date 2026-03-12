@@ -218,7 +218,7 @@ def laod_admin():
 @admin_required
 def update_infos_emp():
     emp_id = request.form.get("emp_id")
-    if emp_id and emp_id.strip():
+    if emp_id:
         emp_id = int(emp_id)
     else:
         return "<div class='alert alert-warning mt-3 flash_msg' style='width:400px;'><p>Employee ID is required.</p></div>", 400

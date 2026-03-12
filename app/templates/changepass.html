@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}ATS | Update password{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='icons/bootstrap-icons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/login.css')}}" media="screen">
+{% endblock %}
+
+{% block content %}
+    <main>
+       <form action="{{ url_for('login.updatePass') }}" method="post">
+            <h3>Change your password for security</h3>
+            <div>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endwith %}
+            </div>
+            <input type="hidden" name="employee_Id" value="{{ user.id}}">
+            <div>
+                <label for="password">New Password</label>
+                <input type="password" name="password" id="password" placeholder="Enter a new password" autocomplete="new-password" required>
+            </div>
+             <div>
+                <label for="confirm_password">Confirm New Password</label>
+                <input type="password" name="confirm_password" id="confirm_password" placeholder="confirm your new password" autocomplete="new-password" required>
+            </div>
+
+            <div>
+                <button type="submit">Validate New Password</button>
+            </div>
+        </form>
+    </main>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/scanner.js')}}"></script>
+{% endblock %}

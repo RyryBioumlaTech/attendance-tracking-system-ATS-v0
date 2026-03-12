@@ -1,7 +1,25 @@
 from functools import wraps
 from flask import session, abort
 from flask_login import current_user
+from app.models import Admin, db
+import os
 
+def create_default_admin():
+    if Admin.query.first() is None:  # Vérifie si la table est vide
+        admin_email = os.getenv("ADMIN_EMAIL")
+        admin_password = os.getenv("ADMIN_PASSWORD")
+
+        if not admin_password:
+            raise ValueError("Le mot de passe admin doit être défini dans la variable d'environnement ADMIN_PASSWORD")
+
+        admin = Admin(
+            login=admin_email,
+            role='superAd'
+        )
+        admin.create_pass(admin_password)
+        db.session.add(admin)
+        db.session.commit()
+        print("Admin par défaut créé avec succès")
 
 def admin_required(f):
     @wraps(f)

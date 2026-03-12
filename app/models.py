@@ -12,7 +12,7 @@ class Admin(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     login = db.Column(db.String(25), unique=True, nullable=False)
     password_hashed = db.Column(db.String(255), nullable=False)
-    role = db.Column(db.String(20), default='admin')
+    role = db.Column(db.String(100), default='admin')
 
     def create_pass(self, password):
         self.password_hashed = generate_password_hash(password)
@@ -45,7 +45,7 @@ class Position(db.Model):
     __tablename__ = 'position'
 
     id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(20),nullable = False )
+    name = db.Column(db.String(100),nullable = False )
 
     employee = db.relationship('Employee', backref = 'position', lazy = True )
 
@@ -71,9 +71,9 @@ class Employee(UserMixin, db.Model):
     __tablename__ = 'employee'
 
     id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(20), nullable = False, unique = False)
-    surname = db.Column(db.String(20), nullable = True, unique = False)
-    email = db.Column(db.String(20), unique = True, nullable = False)
+    name = db.Column(db.String(100), nullable = False, unique = False)
+    surname = db.Column(db.String(100), nullable = True, unique = False)
+    email = db.Column(db.String(100), unique = True, nullable = False)
     password = db.Column(db.String(255), nullable = False)
     sex = db.Column(db.String(6), nullable = False)
 

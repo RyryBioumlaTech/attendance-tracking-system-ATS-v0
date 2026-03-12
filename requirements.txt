@@ -30,6 +30,7 @@ pydyf==0.12.1
 PyMySQL==1.1.1
 pyphen==0.17.2
 python-dateutil==2.9.0.post0
+python-dotenv==1.2.2
 python-engineio==4.12.2
 python-socketio==5.13.0
 qrcode==8.2
