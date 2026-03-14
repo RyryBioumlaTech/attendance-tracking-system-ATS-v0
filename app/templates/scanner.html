@@ -225,7 +225,6 @@
             opacity: 0;
             visibility: hidden;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
             border: 1px solid var(--glass-border);
             white-space: nowrap;
         }
@@ -236,10 +235,10 @@
             transform: translate(-50%, 0) scale(1);
         }
 
-        /* Colored status borders for toasts */
-        .toast.success { border-bottom: 3px solid var(--green); }
-        .toast.error { border-bottom: 3px solid var(--red); }
-        .toast.warning { border-bottom: 3px solid var(--blue); }
+        /* Colored status background for toasts */
+        .toast.success { background-color: var(--green); }
+        .toast.error { background-color: var(--red); }
+        .toast.warning { background-color: var(--blue); }
 
         .toast .icon {
             font-size: 1.3rem;
