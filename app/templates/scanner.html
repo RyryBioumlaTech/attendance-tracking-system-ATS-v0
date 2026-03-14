@@ -1,65 +1,305 @@
 {% extends "base.html" %}
 {% block title %}ATS | Scanner{% endblock %}
+
 {% block styles %}
     <link rel="stylesheet" href="{{ url_for('static', filename='icons/bootstrap-icons.css') }}">
 
     <style>
-        .btn {
-            padding: 10px 18px;
-            width: 150px;
-            font-size: 16px;
+        /* Incorporating your exact system colors */
+        :root {
+            --green: #1E7F4F;
+            --red: #CE1126;
+            --blue: #FF9F00;
+            --bg: #f5f5f5;
+            --overbg: #e4e4e4;
+            --bg-login: rgba(255, 255, 255, 0.95);
+            --input-bg: rgba(240, 240, 240, 1);
+            --text-color: #111;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+            --overlay-bg-f: rgb(0, 0, 0);
+            --overlay-bg-s: rgba(0, 0, 0, 0.4);
+            --gray: #808080;
+            
+            /* Scanner App specifics */
+            --glass-bg: rgba(20, 20, 20, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --scanner-mask: rgba(0, 0, 0, 0.65);
+        }
+
+        html, body {
+            height: 100dvh; /* Modern mobile-friendly full height */
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow: hidden; /* Prevent scrolling in app-like view */
+        }
+
+        main {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Full Screen Camera Container */
+        .scanner-view {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        #reader {
+            width: 100%;
+            height: 100%;
+            background: #000;
             border: none;
-            border-radius: 6px;
+        }
+
+        /* Force html5-qrcode video element to fill screen perfectly */
+        #reader video {
+            object-fit: cover !important;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* Floating Glass Header */
+        .scanner-header {
+            padding: 40px 20px 20px; /* Top padding respects mobile status bars */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%);
+        }
+
+        .scanner-header h1 {
+            font-size: 1.15rem;
+            margin: 0;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-back {
+            border: none;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.3rem;
             cursor: pointer;
-            font-weight: bold;
+            border: 1px solid var(--glass-border);
+            transition: background 0.2s ease;
         }
-        .btn-success {
-            background-color: #28a745;
+
+        .btn-back:active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Dark Overlay with Transparent Cutout */
+        .scanner-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .scan-area {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* perfectly centers the box */
+            width: 250px; /* Set to 250px to match standard html5-qrcode settings */
+            height: 250px;
+            box-shadow: 0 0 0 100vmax var(--scanner-mask);
+            border-radius: 28px;
+            background: transparent;
+        }
+
+         /* Floating Pill Instructions */
+        .scanner-instruction {
+            position: absolute;
+            top: calc(50% + 160px); /* Base 50% + half box height + gap */
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 999px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            width: max-content;
+            max-width: 80%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Floating App Footer Controls */
+        .scanner-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 30px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 50;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+        }
+
+        .action-row {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .scan-button {
+            flex: 1;
+            max-width: 320px;
+            padding: 16px;
+            border-radius: 10px;
+            border: none;
             color: white;
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: transform 0.15s ease, opacity 0.15s ease;
         }
-        .btn-success:hover {
-            background-color: #218838;
+
+        .scan-button:active {
+            transform: scale(0.96);
         }
-        .fade-out {
+
+        .scan-button.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #startBtn {
+            background: var(--green);
+        }
+
+        #toggleBtn {
+            background: var(--blue);
+        }
+
+        /* Modern Top-Down Toast Notification */
+        .toast {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translate(-50%, -20px) scale(0.95);
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            z-index: 100;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            white-space: nowrap;
         }
-        body{
-            background-color: white;
-            color: black;
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, 0) scale(1);
         }
-        
+
+        /* Colored status borders for toasts */
+        .toast.success { border-bottom: 3px solid var(--green); }
+        .toast.error { border-bottom: 3px solid var(--red); }
+        .toast.warning { border-bottom: 3px solid var(--blue); }
+
+        .toast .icon {
+            font-size: 1.3rem;
+        }
     </style>
 {% endblock %}
 
 {% block content %}
 <main>
-        <div class="pt-3 d-flex justify-content-center">
-            <h1>Hello, {{ user.name}}</h1>
+    <!-- Background Camera Container -->
+    <div class="scanner-view">
+        <div id="reader"></div>
+    </div>
+
+    <!-- Floating Glass Header -->
+    <header class="scanner-header">
+        <a class="btn-back" href="/logout" aria-label="Back">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+        <h1>Scan QR Code</h1>
+        <div style="width: 44px;"></div> <!-- Spacer to keep title centered exactly -->
+    </header>
+
+    <!-- Overlay & Targeting Reticle -->
+    <div class="scanner-overlay">
+        <div class="scan-area"></div>
+        <div class="scanner-instruction" id="scannerInstruction">
+            Point camera at QR code to scan
         </div>
-        <div class="d-flex flex-row gap-2 justify-content-center" style="text-align:center; margin-top: 20px;">
-            <button id="startBtn" class="btn btn-success">Scan</button>
+    </div>
+
+    <!-- Dynamic Toast Notification -->
+    <div class="toast" id="toast" role="status" aria-live="polite">
+        <span class="icon" id="toastIcon"></span>
+        <span id="toastText"></span>
+    </div>
+
+    <!-- Floating Action Controls -->
+    <footer class="scanner-footer">
+        <div class="action-row">
+            <button id="startBtn" class="scan-button">
+                <i class="bi bi-qr-code-scan"></i> 
+                <span class="txt_scan">
+                    Start scanning
+                </span>
+            </button>
         </div>
-        <div class="scanner" style="margin-top: 20px; display: flex; justify-content: center;">
-            <div id="reader" style="width: 100%; height: 100%; border-radius: 8px;"></div>
+        <div class="action-row">
+            <button id="toggleBtn" class="scan-button">
+                <i class="bi bi-camera-video"></i>
+                <span class="txt_cam">
+                    Turn camera on
+                </span>
+            </button>
         </div>
-        <div class="alert alert-success d-flex align-items-center px-3 py-2 gap-2 mx-auto" id="alert" role="alert"  style="height: fit-content; width: fit-content; display: none !important;">
-            <i class="bi bi-check-circle-fill"></i>
-            <div>
-                Scan validated !
-            </div>
-        </div>
-        <div class="alert alert-danger d-flex align-items-center px-3 py-2 gap-2 mx-auto" id="alert2" role="alert"  style="height: fit-content; width: fit-content; display: none !important;">
-            <i class="bi bi-x-circle-fill"></i>
-            <div>
-                Scan again !
-            </div>
-        </div>
-        
-    </main>
+    </footer>
+</main>
 {% endblock %}
 
-{% block scripts %}    
+{% block scripts %}
     <script src="{{ url_for('static', filename='js/html5-qrcode.min.js')}}"></script>
     <script src="{{ url_for('static', filename='js/scanner.js')}}"></script>
 {% endblock %}

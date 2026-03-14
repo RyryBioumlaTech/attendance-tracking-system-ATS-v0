@@ -6,7 +6,8 @@
 {% block content %}
 <canvas id="bg-net"></canvas>
     <form action="{{ url_for('login.login') }}" method="post">
-        <h3>Sign UP</h3>
+        <h3>Welcome Back</h3>
+        <p>Please enter your credentials to access your account.</p>
         <div>
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% for category, message in messages %}
