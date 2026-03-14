@@ -13,9 +13,6 @@ def show():
     return render_template("login.html")
 
 
-# -----------------------------
-# LOGIN
-# -----------------------------
 @login_bp.route("/login", methods=["POST"])
 def login():
 
@@ -39,15 +36,9 @@ def login():
 
     login_user(user)
 
-    # -----------------------------
-    # ADMIN LOGIN
-    # -----------------------------
     if user.is_admin() or user.is_super_admin():
         return redirect(url_for("dashboard.admin_dash"))
 
-    # -----------------------------
-    # EMPLOYEE LOGIN
-    # -----------------------------
     if user.is_employee():
 
         # mot de passe par défaut → forcer changement
@@ -61,23 +52,16 @@ def login():
     return redirect(url_for("login.show"))
 
 
-# -----------------------------
-# PASSWORD CHANGE PAGE
-# -----------------------------
 @login_bp.route("/changePass")
 @login_required
 def changePass():
 
-    # seuls les employés doivent accéder ici
     if not current_user.is_employee():
         return redirect(url_for("login.show"))
 
     return render_template("changepass.html", user=current_user)
 
 
-# -----------------------------
-# UPDATE PASSWORD
-# -----------------------------
 @login_bp.route("/updatePass", methods=["POST"])
 @login_required
 def updatePass():
@@ -113,9 +97,6 @@ def updatePass():
     return redirect(url_for("login.scanner"))
 
 
-# -----------------------------
-# EMPLOYEE SCANNER
-# -----------------------------
 @login_bp.route("/scanner")
 @login_required
 def scanner():
@@ -126,9 +107,6 @@ def scanner():
     return render_template("scanner.html", user=current_user)
 
 
-# -----------------------------
-# LOGOUT
-# -----------------------------
 @login_bp.route("/logout")
 @login_required
 def logout():

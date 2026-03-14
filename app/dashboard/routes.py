@@ -7,6 +7,7 @@ from datetime import timedelta, datetime, time
 from weasyprint import HTML
 import pandas as pd 
 import io
+import re
 
 
 @dash_bp.route('/admin_dash')
@@ -22,7 +23,7 @@ def reportsdata():
     if (not current_user.is_admin() and not current_user.is_super_admin()):
         return redirect(url_for('login.show'))
     departments = Department.query.all()
-    return render_template('partials/report.html', departments=departments)
+    return render_template('partials/report.html', departments=departments, user = current_user)
 
 @dash_bp.route('/load/report_data', methods=['POST'])
 @login_required
@@ -178,19 +179,23 @@ def managedata():
         return redirect(url_for('login.show'))
     departments = Department.query.all()
     positions = Position.query.all()
-    return render_template('partials/manage.html', departments=departments, positions=positions)
+    return render_template('partials/manage.html', departments=departments, positions=positions, user=current_user)
 
 @dash_bp.route('/load/manage_data', methods=['POST'])
 @login_required
 def load_managed_data():
     if (not current_user.is_admin() and not current_user.is_super_admin()):
         return redirect(url_for('login.show'))
+    
     department_id = request.form.get('department_id')
-    print(department_id)
+
     if department_id == "0":
         return "<div class='alert alert-info mt-3 flash_msg' style='width:400px;'><p>Please select a department !</p></div>"
+    
     employee = db.session.query(User).filter(User.department_id==department_id, User.role=="employee")
+
     list_employee = []
+
     for emp in employee:
         position = Position.query.filter(Position.id==emp.position_id).first()
         department = Department.query.filter(Department.id==emp.department_id).first()
@@ -206,7 +211,50 @@ def load_managed_data():
             'department_id': emp.department_id,
             'position_id': emp.position_id
         })
+        
     return render_template('partials/manage_table.html', employee_list=list_employee)
+
+@dash_bp.route('/load/manage_data_by_name', methods=['POST'])
+@login_required
+def load_managed_data_by_name():
+    if (not current_user.is_admin() and not current_user.is_super_admin()):
+        return redirect(url_for('login.show'))
+    
+    user_searched_name = request.form.get('userName')
+
+    
+    if not user_searched_name or user_searched_name.strip() == "":
+        return "<div class='alert alert-info mt-3 flash_msg' style='width:400px;'><p>Please enter a name to search !</p></div>"
+    
+    if user_searched_name.isdigit():
+        return "<div class='alert alert-warning mt-3 flash_msg' style='width:400px;'><p>Enter a valid name !</p></div>"
+    
+    if user_searched_name:
+        employee = db.session.query(User).filter(User.name.ilike(f"%{user_searched_name}%"), User.role=="employee")
+    
+    if not employee:
+        return "<div class='alert alert-info mt-3 flash_msg' style='width:400px;'><p>No employee found with this name !</p></div>"
+
+    list_employee = []
+
+    for emp in employee:
+        position = Position.query.filter(Position.id==emp.position_id).first()
+        department = Department.query.filter(Department.id==emp.department_id).first()
+        print('sa position est ', position)
+        list_employee.append({
+            'id': emp.id,
+            'name': emp.name,
+            'surname': emp.surname,
+            'email': emp.email,
+            'sex': emp.sex,
+            'department': department.name if department else 'Unknow',
+            'position': position.name if position else 'Unknown',
+            'department_id': emp.department_id,
+            'position_id': emp.position_id
+        })
+        
+    return render_template('partials/manage_table.html', employee_list=list_employee)
+
 
 
 @dash_bp.route('/load/admin-manager')
@@ -291,13 +339,13 @@ def update_infos_emp():
 def create_emp_account():
     if (not current_user.is_admin() and not current_user.is_super_admin()):
         return redirect(url_for('login.show'))
-    new_emp_name = request.form.get('new_emp_name')
-    new_emp_email = request.form.get('new_emp_email')
-    new_emp_sex = request.form.get('new_emp_sex')
-    new_emp_pos = request.form.get('new_emp_position')
-    new_emp_dep = request.form.get('new_emp_department')
+    new_emp_name = request.form.get('new_emp_name').strip()
+    new_emp_email = request.form.get('new_emp_email').strip()
+    new_emp_sex = request.form.get('new_emp_sex').strip()
+    new_emp_pos = request.form.get('new_emp_position').strip()
+    new_emp_dep = request.form.get('new_emp_department').strip()
     emp_pass = "12345678"
-    new_emp_surname = request.form.get('new_emp_surname')
+    new_emp_surname = request.form.get('new_emp_surname').strip()
 
     if not new_emp_name or not new_emp_email or not new_emp_sex or not new_emp_pos or not new_emp_dep or not emp_pass:
         return '<div class="alert alert-warning flash_msg"><p> Please fill all fields !</p></div>'
@@ -323,7 +371,7 @@ def create_emp_account():
         department_id = new_emp_dep, #type: ignore
         role = "employee"
     )
-    emp.set_passwordd(emp_pass)
+    emp.set_password(emp_pass)
     db.session.add(emp)
     db.session.commit()
 

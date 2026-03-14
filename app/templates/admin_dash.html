@@ -11,14 +11,21 @@
 <div class="wrapper">
     <aside id="sidebar">
         <div class="top_sidebar">
-            <img src="{{ url_for('static', filename='icons/qr-code.png')}}" alt="logo ATS">
+            <div class="inner_top_bar">
+                <img src="{{ url_for('static', filename='icons/qr-code.png')}}" alt="logo ATS">
+                <div class="app_name">
+                    <div>Minddevel</div>
+                    <hr style="border: none; height: 1px; background-color: #1E7F4F ; margin-top: -1px; margin-bottom: -1px;">
+                    <div>ATS</div>
+                </div>
+            </div>
         </div>
-        <hr style="border: none; height: 1px; background-color: white">
+        <hr style="border: none; height: 1px; background-color: white ; margin-top: -0.1rem;">
         <ul class="sidebar-nav" style="margin-top: -30px;">
             <p style="margin-left: 20px; font-size: 12px; font-weight: 700; color: #74ecb0a7;">GENERAL</p>
             <li class="sidebar-item">
                 <a href="#" class="sidebar-link active" onclick="loadsec('reports')"><i
-                        class="bi bi-list-task"></i><span>Reports</span></a>
+                        class="bi bi-clipboard-fill"></i><span>Reports</span></a>
             </li>
             <p style="margin-left: 20px; margin-top: 20px; font-size: 12px; font-weight: 700; color: #74ecb0a7;">
                 MANAGEMENT

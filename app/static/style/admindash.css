@@ -84,13 +84,33 @@ body {
     display: flex;
     flex-direction: row;
     gap: 10px;
-    padding-left: 1.98rem;
+    padding: 1rem;
     width: 100%;
-    justify-items: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.inner_top_bar {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 10px;
+    gap: 10px;
+}
+
+.app_name {
+    display: flex;
+    flex-direction: column;
+    font-weight: 700;
+    color: var(--green);
 }
 
 .top_sidebar img {
-    margin-top: 10px;
     width: 50px;
     height: 50px;
 }
@@ -325,7 +345,7 @@ label {
     display: block;
     width: 154px;
     background-color: rgba(255, 255, 255, 0.913);
-    border-radius: 3px;
+    border-radius: 5px;
     padding: 0px 10px;
     border: 1px solid #080710;
     font-size: 14px;
@@ -412,13 +432,12 @@ table {
     gap: 20px;
     right: 25px;
     margin-top: 15px;
-    padding-right: 13px;
 }
 
 .average {
     background-color: white;
     border-radius: 10px;
-    width: 27%;
+    width: 30%;
     padding: 10px 15px;
     box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.2);
 }
@@ -493,9 +512,6 @@ thead {
     height: 40px !important;
 }
 
-.input_pass_g {
-    width: 85% !important;
-}
 
 .email {
     overflow-x: hidden;
@@ -535,6 +551,9 @@ thead {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 10px;
 }
 
 .filter-input {

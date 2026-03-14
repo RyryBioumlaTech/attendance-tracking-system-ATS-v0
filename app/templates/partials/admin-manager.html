@@ -4,14 +4,17 @@
             <i class="bi bi-person-fill-gear"></i>
             <span>ADMIN MANAGER</span>
         </div>
-        <button id="show_form2" class="button"> + Create an admin</button>
+         <div style="display: flex; gap: 5px; color: #5f5f5f;">
+            <i class="bi bi-person-circle"></i>
+            {{ admin.role }}
+        </div>
     </div>
 
     <div>
         <div class="spinner-border text-success mt-3 global-spinner" role="status" style="display: none;">
             <span class="sr-only"></span>
         </div>
-
+        <button id="show_form2" class="button"> + Create an admin</button>
         <div class="manager_admin_table">
             <div class="table_sec">
                 <table class="mdrn_table admin-manager">
@@ -24,7 +27,7 @@
                     {% for ad in admin_list %}
                     <tr data-id="{{ ad.id }}" style="color: #939191;">
                         <td class="id td1">#{{ ad.id}}</td>
-                        <td class="name">{{ ad.email }}</td>
+                        <td class="name">{{ ad.name }}</td>
                         <td class="email">{{ ad.role }}</td>
                         <td class="td2">
                             {% if admin.login != ad.login %}
