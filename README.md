@@ -29,7 +29,7 @@ ses deux annexes à Yaoundé :
 - Génération de QR codes individuels par employé
 - Scan des pointages via smartphone (entrée/sortie)
 - Tableau de bord admin : consultation et export des données de présence
-- [Authentification admin ? Gestion multi-sites entre le siège et les 2 annexes ?]
+- Authentification avec rôles 
 
 ## 🛠️ Stack technique
 
